@@ -1,11 +1,20 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-//canvas
-width = canvas.width
-height =canvas.height
+const body= document.querySelector("body")
+//window
+
+let W, H;
+function updateWH() {
+    console.log('resizing...')
+    W=window.innerWidth
+    H=window.innerHeight
+}
+window.addEventListener("resize", updateWH)
+updateWH()
+
 //ball 
-let ballX = width/2;
-let ballY = height-100;
+let ballX = canvas.width/2;
+let ballY = canvas.height-100;
 let speedx = 5;
 let speedy = -5;
 let ballRadius = 10;
@@ -30,7 +39,6 @@ for(let c=0; c<brickColumnCount; c++) {
         bricks[c][r] = { x: 0, y: 0, status:1};
     }
 }
-
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -74,10 +82,10 @@ function keyUpHandler(e) {
 
 function mobileTouch(e){
     screenX = e.touches[0].screenX;
-    if (screenX>width/2){
+    if (screenX>canvas.width/2){
         rightPressed=true
     }
-    if (screenX<=width/2){
+    if (screenX<=canvas.width/2){
         leftPressed=true
     }
 }
@@ -97,8 +105,8 @@ function drawRect(){
 function moveRect(){
     if(rightPressed) {
         rectX += 10;
-        if (rectX + rectW > width){
-            rectX = width - rectW;
+        if (rectX + rectW > canvas.width){
+            rectX = canvas.width - rectW;
         }
     }
     else if(leftPressed) {
@@ -152,6 +160,7 @@ function touchBrick(){
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    updateWH()
     drawBall();
     drawRect();
     moveRect();
@@ -163,5 +172,7 @@ function draw() {
     touchBrick();
 }
 setInterval(draw, 20)
+
+
 
 
