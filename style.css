@@ -1,38 +1,31 @@
 *{
     margin: 0;
     padding: 0;
-    user-select:none;
-    overflow: hidden;
-}
+    touch-action: none;
+    overflow:hidden;
 
+    width:100%;
+    height: 100%;
+}
 body{
     display:flex;
-    background-color: grey;
-    flex-direction: column;
-    width:100vw;
-    height:100vh;
-}
-
-canvas{
-    background-color: black;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-#ath{
-    background-color:black;
-    height:20%;
-    display:flex;
-    justify-content: center;
+    justify-content:center;
     align-items: center;
-    border-top:5px solid white;
-    box-sizing: border-box;
+}
+#gameArea {
+    background-color:orange;
+  }
+
+#gameCanvas {
+    width: 100%;
+    height: 80%;
+    background-color: black;
 }
 
-.fullscreenbtn{
-    background-color:purple;
-    width:20%;
-    height:80%;
+#HUD {
+    width: 100%;
+    height: 20%;
+    bottom: 0;
+    opacity: 0.8;
+    background-color: aquamarine;
 }

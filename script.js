@@ -1,42 +1,56 @@
-//window
 window.onload=function(){
-const body= document.querySelector("body")
-let W, H, AR;
+const gameArea = document.getElementById('gameArea');
+let AR = 16 / 9;
+let W = window.innerWidth;
+let H = window.innerHeight;
+let newAR = W / H;
+const canvas = document.querySelector('canvas');
+window.addEventListener('resize', resizeGame, false);
+window.addEventListener('orientationchange', resizeGame, false);
+console.log("gamearea", gameArea)
+console.log("canvas", canvas)
+function resizeGame() {
+    if (newAR > AR) {
+        W = H * AR;
+        gameArea.style.height = H*.9+ 'px';
+        gameArea.style.width = W *.9+ 'px';
+        canvas.width = W;
+        canvas.height = H;
+    } 
+    else {
+        H = W / AR;
+        gameArea.style.width = W *.9+ 'px';
+        gameArea.style.height = H*.9 + 'px';
+        canvas.width = H;
+        canvas.height = W;
+    }
 
-function updateWH() {
-    console.log('resizing...')
-    W=window.innerWidth
-    H=window.innerHeight
-    AR=W/H
+    //gameArea.style.marginTop = (-H / 2) + 'px';
+    //gameArea.style.marginLeft = (-W / 2) + 'px';
+    
+  
 }
-window.addEventListener("resize", updateWH)
+resizeGame()
 
-function drawCanvas(){
-    body.innerHTML=`<canvas id="myCanvas" width="${1900}" height="${900}"></canvas>
-                    <div id="ath">
-                        <button class="fullscreenbtn" type="button">Fullscreen</button>
-                    </div>`      
-}
 
-updateWH()
-drawCanvas()
-const canvas = document.getElementById("myCanvas");
+
 const ctx = canvas.getContext("2d");
 
 
-//bouton fullscreen
-const btn = document.querySelector(".fullscreenbtn")
-btn.addEventListener("click",toggleFullScreen,false)
 
-function toggleFullScreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
-        } else {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          }
-        }
-      }   
+//bouton fullscreen
+// const btn = document.querySelector(".fullscreenbtn")
+// btn.addEventListener("click",toggleFullScreen,false)
+
+// function toggleFullScreen() {
+//         if (!document.fullscreenElement) {
+//             document.documentElement.requestFullscreen();
+//         } else {
+//           if (document.exitFullscreen) {
+//             document.exitFullscreen();
+//           }
+//         }
+//       }   
 
 //ball 
 let ballX = canvas.width/2;
@@ -54,7 +68,7 @@ let leftPressed = false;
 //bricks
 let brickRowCount = 3;
 let brickColumnCount = 9;
-let brickWidth = 100;
+let brickWidth = canvas.width/10;
 let brickHeight = 50;
 let brickPadding = 10;
 let brickOffsetTop = 10;
@@ -190,7 +204,8 @@ function touchBrick(){
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    updateWH();
+    resizeGame()
+    //updateWH();
     drawBall();
     drawRect();
     moveRect();
