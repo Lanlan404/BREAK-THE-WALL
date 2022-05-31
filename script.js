@@ -1,16 +1,42 @@
-const canvas = document.getElementById("myCanvas");
-const ctx = canvas.getContext("2d");
-const body= document.querySelector("body")
 //window
+window.onload=function(){
+const body= document.querySelector("body")
+let W, H, AR;
 
-let W, H;
 function updateWH() {
     console.log('resizing...')
     W=window.innerWidth
     H=window.innerHeight
+    AR=W/H
 }
 window.addEventListener("resize", updateWH)
+
+function drawCanvas(){
+    body.innerHTML=`<canvas id="myCanvas" width="${1900}" height="${900}"></canvas>
+                    <div id="ath">
+                        <button class="fullscreenbtn" type="button">Fullscreen</button>
+                    </div>`      
+}
+
 updateWH()
+drawCanvas()
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+
+
+//bouton fullscreen
+const btn = document.querySelector(".fullscreenbtn")
+btn.addEventListener("click",toggleFullScreen,false)
+
+function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          }
+        }
+      }   
 
 //ball 
 let ballX = canvas.width/2;
@@ -19,9 +45,10 @@ let speedx = 5;
 let speedy = -5;
 let ballRadius = 10;
 //rect
-let rectW = 100;
-let rectH = 20;
-let rectX = 450
+let rectW = canvas.width/10;
+let rectH = canvas.height/25;
+let rectX = canvas.width/2-rectW/2;
+let rectY = canvas.height-rectH*1.5;
 let rightPressed = false;
 let leftPressed = false;
 //bricks
@@ -44,6 +71,8 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("touchstart", mobileTouch,false);
 document.addEventListener("touchend",mobileStopTouch,false);
+
+
 
 function drawBall(){
     ctx.beginPath();
@@ -94,9 +123,10 @@ function mobileStopTouch(e){
     rightPressed=false
     leftPressed=false
 }
+
 function drawRect(){
     ctx.beginPath;
-    ctx.fillRect(rectX,430,rectW,rectH);
+    ctx.fillRect(rectX,rectY,rectW,rectH);
     ctx.fillStyle = 'red';
     ctx.fill()
     ctx.closePath
@@ -118,7 +148,7 @@ function moveRect(){
 }
 
 function touchRect(){
-    if(ballY>=430-ballRadius && ballX+speedx-ballRadius>rectX && ballX+speedx+ballRadius<rectX+rectW ){
+    if(ballY>=rectY-ballRadius && ballX+speedx-ballRadius>rectX && ballX+speedx+ballRadius<rectX+rectW ){
         speedy = -speedy;
     }
 }
@@ -160,7 +190,7 @@ function touchBrick(){
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    updateWH()
+    updateWH();
     drawBall();
     drawRect();
     moveRect();
@@ -172,7 +202,4 @@ function draw() {
     touchBrick();
 }
 setInterval(draw, 20)
-
-
-
-
+}
