@@ -119,35 +119,39 @@ function drawBall(){
 // }
 
 /////////////////////////////////////////////////////bricks
-// let brick ={
-//     w:canvas.width/12,
-//     h:canvas.height/15,
-// }
+let brick ={
+    w:canvas.width/12,
+    h:canvas.height/15,
+    x:0,
+    y:0,
+    rows:5,
+    columns:Math.floor(canvas.width/(canvas.width/12))
+}
 
-
-let brickWidth = canvas.width/12;
-let brickHeight = canvas.height/15;
-let brickRowCount = 5;
-let brickColumnCount = Math.floor(canvas.width/brickWidth);
+// let brickWidth = canvas.width/12;
+// let brickHeight = canvas.height/15;
+// let brickRowCount = 5;
+// let brickColumnCount = Math.floor(canvas.width/brickWidth);
 let bricks = [];
-for(let c=0; c<brickColumnCount; c++) {
+for(let c=0; c<brick.columns; c++) {
     bricks[c] = [];
-    for(let r=0; r<brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0, status:1};
+    for(let r=0; r<brick.rows; r++) {
+        bricks[c][r] = { x: 0, y: 0, status:1}; 
     }
 }
 
+
 function drawBricks(){
-    for(let c=0; c<brickColumnCount; c++) {
-        for(let r=0; r<brickRowCount; r++) {
+    for(let c=0; c<brick.columns; c++) {
+        for(let r=0; r<brick.rows; r++) {
             if (bricks[c][r].status === 1){
-                let brickX = c*(brickWidth);
-                let brickY = r*(brickHeight)
-                bricks[c][r].x = brickX;
-                bricks[c][r].y = brickY;
+                brick.x = c*(brick.w);
+                brick.y = r*(brick.h)
+                bricks[c][r].x = brick.x;
+                bricks[c][r].y = brick.y;
                 ctx.beginPath();
-                ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.strokeRect(brickX,brickY,brickWidth,brickHeight)
+                ctx.rect(brick.x, brick.y, brick.w, brick.h);
+                ctx.strokeRect(brick.x,brick.y,brick.w,brick.h)
                 ctx.fillStyle = "green";
                 ctx.strokeStyle = "white";
                 ctx.fill();
@@ -190,14 +194,75 @@ function touchRect(){
 }
 
 function touchBrick(){
-    for(var c=0; c<brickColumnCount; c++) {
-        for(var r=0; r<brickRowCount; r++) {
+    for(var c=0; c<brick.columns; c++) {
+        for(var r=0; r<brick.rows; r++) {
             var b = bricks[c][r];
             if (b.status===1){
-                if(ball.x+ball.radius > b.x && ball.x-ball.radius < b.x+brickWidth && ball.y+ball.radius > b.y && ball.y-ball.radius < b.y+brickHeight) {
-                    ball.speedy = -ball.speedy;
+                // if(ball.x+ball.radius > b.x && ball.x-ball.radius < b.x+brick.w && ball.y+ball.radius > b.y && ball.y-ball.radius < b.y+brick.h) {
+                //     ball.speedy = -ball.speedy;
+                //     b.status = 0
+                // }
+                let brickTopDetector={
+                    w:brick.w,
+                    h:1,
+                    x:b.x,
+                    y:b.y,
+                }
+                
+                let brickBottomDetector={
+                    w:brick.w,
+                    h:1,
+                    x:b.x,
+                    y:b.y+brick.h,
+                }
+                
+                let brickLeftDetector={
+                    w:1,
+                    h:brick.h,
+                    x:b.x,
+                    y:b.y,
+                }
+                
+                let brickRightDetector={
+                    w:1,
+                    h:brick.h,
+                    x:b.x+brick.w,
+                    y:b.y,
+                }
+
+                if (ball.x+ball.radius+ball.speedx > brickTopDetector.x &&
+                    ball.x-ball.radius+ball.speedx < brickTopDetector.x+brickTopDetector.w &&
+                    ball.y+ball.radius+ball.speedy > brickTopDetector.y &&
+                    ball.y-ball.radius+ball.speedy < brickTopDetector.y+brickTopDetector.h){
+                    console.log("brick top detector")
+                    ball.speedy = -ball.speedy 
+                    b.status = 0     
+                    }
+                if (ball.x+ball.radius+ball.speedx > brickBottomDetector.x &&
+                    ball.x-ball.radius+ball.speedx < brickBottomDetector.x+brickBottomDetector.w &&
+                    ball.y+ball.radius+ball.speedy > brickBottomDetector.y &&
+                    ball.y-ball.radius+ball.speedy < brickBottomDetector.y+brickBottomDetector.h){
+                    console.log("brick bottom detector")
+                    ball.speedy = -ball.speedy
+                    b.status = 0  
+                    }
+                if (ball.x+ball.radius+ball.speedx > brickLeftDetector.x &&
+                    ball.x-ball.radius+ball.speedx < brickLeftDetector.x+brickLeftDetector.w &&
+                    ball.y+ball.radius+ball.speedy > brickLeftDetector.y &&
+                    ball.y-ball.radius+ball.speedy < brickLeftDetector.y+brickLeftDetector.h){
+                    console.log("brick left detector")
+                    ball.speedx = -ball.speedx
                     b.status = 0
-                }    
+                }
+                if (ball.x+ball.radius+ball.speedx > brickRightDetector.x &&
+                    ball.x-ball.radius+ball.speedx < brickRightDetector.x+brickRightDetector.w &&
+                    ball.y+ball.radius+ball.speedy > brickRightDetector.y &&
+                    ball.y-ball.radius+ball.speedy < brickRightDetector.y+brickRightDetector.h){
+                    console.log("brick right detector")
+                    ball.speedx = -ball.speedx
+                    b.status = 0 
+                }
+                      
             }
         }
     }
