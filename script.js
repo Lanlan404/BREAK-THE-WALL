@@ -29,51 +29,81 @@ function resizeGame() {
 resizeGame()
 
 /////////////////////////////////////////////////////rect
-let rectW = canvas.width/10;
-let rectH = canvas.height/25;
-let rectX = canvas.width/2-rectW/2;
-let rectY = canvas.height-rectH*1.5;
+let rect ={
+    w: canvas.width/10,
+    h: canvas.height/25,
+    x: canvas.width/2-(canvas.width/10)/2,
+    y: canvas.height-(canvas.height/25)*1.5,
+}
 
-let rectTopY=rectY
-let rectTopW=rectW
-let rectTopX=rectX
-let rectTopH=1
+// let rectW = canvas.width/10;
+// let rectH = canvas.height/25;
+// let rectX = canvas.width/2-rectW/2;
+// let rectY = canvas.height-rectH*1.5;
 
-let rectLeftY=rectY
-let rectLeftW=1
-let rectLeftX=rectX
-let rectLeftH=rectH
+let rectTopDetector = {
+    w:rect.w,
+    h:1,
+    x:rect.x,
+    y:rect.y,
+}
 
-let rectRightY=rectY
-let rectRightW=1
-let rectRightX=rectX+rectW
-let rectRightH=rectH
+let rectLeftDetector = {
+    w:1,
+    h:rect.h,
+    x:rect.x,
+    y:rect.y,
+}
 
+let rectRightDetector ={
+    w:1,
+    h:rect.h,
+    x:rect.x+rect.w,
+    y:rect.y
+}
 
+// let rectLeftY=rectY
+// let rectLeftW=1
+// let rectLeftX=rectX
+// let rectLeftH=rectH
+
+// let rectRightY=rectY
+// let rectRightW=1
+// let rectRightX=rectX+rectW
+// let rectRightH=rectH
 
 function drawRect(){
     ctx.beginPath;
-    ctx.fillRect(rectX,rectY,rectW,rectH);
-    ctx.fillStyle = 'red';
+    ctx.fillRect(rect.x,rect.y,rect.w,rect.h);
+    ctx.fillStyle = "red";
     ctx.fill()
     ctx.closePath
 }
 
 ///////////////////////////////////////////////////ball 
-let ballRadius = canvas.width/100;
-let ballX=rectX+(rectX/2)
-let ballY = rectY-ballRadius
-let speedx = canvas.width/200;
-let speedy = -(canvas.height/200);
+let ball ={
+    radius: canvas.width/100,
+    x: rect.x+rect.x/2,
+    y: rect.y-canvas.width/100,
+    speedx: canvas.width/200,
+    speedy: -(canvas.height/200),
+}
+
+
+// let ballRadius = canvas.width/100;
+// let ballX=rectX+(rectX/2)
+// let ballY = rectY-ballRadius
+// let speedx = canvas.width/200;
+// let speedy = -(canvas.height/200);
 let life = 3
 function drawBall(){
     ctx.beginPath();
-    ctx.arc(ballX, ballY, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = 'blue';
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+    ctx.fillStyle = "blue";
     ctx.fill();
     ctx.closePath();
-    ballX+=speedx;
-    ballY+=speedy;
+    ball.x+=ball.speedx;
+    ball.y+=ball.speedy;
 }
 
 // function lostBall(){
@@ -89,6 +119,12 @@ function drawBall(){
 // }
 
 /////////////////////////////////////////////////////bricks
+// let brick ={
+//     w:canvas.width/12,
+//     h:canvas.height/15,
+// }
+
+
 let brickWidth = canvas.width/12;
 let brickHeight = canvas.height/15;
 let brickRowCount = 5;
@@ -124,26 +160,33 @@ function drawBricks(){
 
 ////////////////////////////////////////////////////////touch
 function touchBorder(){
-    if(ballX+speedx > canvas.width || ballX+speedx < 0) {
-        speedx = -speedx;
+    if(ball.x+ball.speedx > canvas.width || ball.x+ball.speedx < 0) {
+        ball.speedx = -ball.speedx;
     }
-    if(ballY+speedy > canvas.height || ballY+speedy < 0) {
-        speedy = -speedy;
+    if(ball.y+ball.speedy > canvas.height || ball.y+ball.speedy < 0) {
+        ball.speedy = -ball.speedy;
     }
 }
 
-function touchRect(){
-    //if(ballY+ballRadius>rectY && ballY-ballRadius<rectY+rectH && ballX+ballRadius>rectX && ballX-ballRadius<rectX+rectW ){
-        if(ballY+ballRadius>rectTopY && ballY-ballRadius<rectTopY+rectTopH && ballX + ballRadius >rectTopX && ballX-ballRadius<rectTopX+rectTopW){ // rectTOP
-            speedy = -speedy
+function touchRect(){    
+    if(ball.x+ball.radius+ball.speedx > rectTopDetector.x &&
+       ball.x-ball.radius+ball.speedx < rectTopDetector.x+rectTopDetector.w &&
+       ball.y+ball.radius+ball.speedy > rectTopDetector.y &&
+       ball.y-ball.radius+ball.speedy < rectTopDetector.y+rectTopDetector.h) {
+        console.log("topRectDetector")
+        ball.speedy = -ball.speedy
         }
-        else if(ballY+ballRadius>rectLeftY && ballY+ballRadius< rectLeftY+rectLeftH && ballX+ballRadius>rectLeftX && ballX-ballRadius< rectLeftX+rectLeftW){ //rectLEFT
-            speedx = -speedx
-         }
-        else if(ballY+ballRadius>rectRightY && ballY+ballRadius< rectRightY+rectRightH && ballX+ballRadius>rectRightX && ballX-ballRadius< rectRightX+rectRightW){ //rectLEFT
-            speedx = -speedx
-         }
-    //}
+    if((ball.x+ball.radius+ball.speedx > rectLeftDetector.x &&
+        ball.x-ball.radius+ball.speedx < rectLeftDetector.x+rectLeftDetector.w &&
+        ball.y+ball.radius+ball.speedy > rectLeftDetector.y &&
+        ball.y-ball.radius+ball.speedy < rectLeftDetector.y+rectLeftDetector.h)||
+       (ball.x+ball.radius+ball.speedx > rectRightDetector.x &&
+        ball.x-ball.radius+ball.speedx < rectRightDetector.x+rectRightDetector.w &&
+        ball.y+ball.radius+ball.speedy> rectRightDetector.y &&
+        ball.y-ball.radius+ball.speedy< rectRightDetector.y+rectRightDetector.h)){
+        console.log("sideRectDetector")
+        ball.speedx = -ball.speedx
+        }
 }
 
 function touchBrick(){
@@ -151,8 +194,8 @@ function touchBrick(){
         for(var r=0; r<brickRowCount; r++) {
             var b = bricks[c][r];
             if (b.status===1){
-                if(ballX+ballRadius > b.x && ballX-ballRadius < b.x+brickWidth && ballY+ballRadius > b.y && ballY-ballRadius < b.y+brickHeight) {
-                    speedy = -speedy;
+                if(ball.x+ball.radius > b.x && ball.x-ball.radius < b.x+brickWidth && ball.y+ball.radius > b.y && ball.y-ball.radius < b.y+brickHeight) {
+                    ball.speedy = -ball.speedy;
                     b.status = 0
                 }    
             }
@@ -203,19 +246,21 @@ function mobileStopTouch(e){
 
 function moveRect(){
     if(rightPressed) {
-        rectX += canvas.width/175;
-        if (rectX + rectW > canvas.width){
-            rectX = canvas.width - rectW;
-        }
+        rect.x += canvas.width/175;
+        if (rect.x + rect.w > canvas.width){
+            rect.x = canvas.width - rect.w;
+        } 
     }
     else if(leftPressed) {
-        rectX -= canvas.width/175;
-        if (rectX < 0){
-            rectX = 0;
+        rect.x -= canvas.width/175;
+        if (rect.x < 0){
+            rect.x = 0;
         }
-    }    
+    }  
+    rectTopDetector.x=rect.x                        // Pourquoi dois-je redéclarer ici? l'initialisation des valeurs de l'objet ne se met pas a jour?
+    rectLeftDetector.x=rect.x
+    rectRightDetector.x=rect.x+rect.w 
 }
-
 
 
 ////////////////////draw
