@@ -2,6 +2,8 @@
     margin: 0;
     padding: 0;
     overflow:hidden;
+    user-select: none;
+    -moz-user-select: none;
 }
 
 body{
@@ -12,6 +14,27 @@ body{
     height:100vh;
     background-color: black;
 }
+#startMenu{
+    background-color: black;
+    color:white;
+    font-family:'Press Start 2P';
+    font-size:100%;
+    text-align: center;
+    position:absolute;
+    border: 5px white solid;
+    box-sizing: border-box;
+    display:flex;
+    flex-direction: column;
+}
+
+#startMenu h1{
+    margin:auto
+}
+
+#startMenu p{
+    margin: auto;
+}
+
 #gameArea {
     background-color:orange;
     display:flex;
@@ -32,4 +55,19 @@ body{
     background-color: black;
     border:1px white solid;
     box-sizing:border-box;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button{
+    width: 25%;
+    height: 80%;
+    font-family: 'Press Start 2P';
+    font-size:100%;
+    background-color: black;
+    border:1px white solid;
+    box-sizing:border-box;
+    border-radius: 15%;
+
 }

@@ -1,5 +1,6 @@
-window.onload=function(){
+//window.onload=function(){
 //////////////////////////////////////////////////window
+const startMenu = document.getElementById('startMenu');
 const gameArea = document.getElementById('gameArea');
 let AR = 16 / 9;
 let W = window.innerWidth;
@@ -9,19 +10,22 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext("2d");
 window.addEventListener('resize', resizeGame, false);
 window.addEventListener('orientationchange', resizeGame, false);
-
 function resizeGame() {
     if (newAR > AR) {
         W = H * AR;
-        gameArea.style.height = H*.9+ 'px';
-        gameArea.style.width = W *.9+ 'px';
+        startMenu.style.height = H*0.8 + 'px';
+        startMenu.style.width = W + 'px';
+        gameArea.style.height = H + 'px';
+        gameArea.style.width = W + 'px';
         canvas.width = W;
         canvas.height = H;
     } 
     else {
         H = W / AR;
-        gameArea.style.width = W *.9+ 'px';
-        gameArea.style.height = H*.9 + 'px';
+        startMenu.style.height = H*0.8 + 'px';
+        startMenu.style.width = W + 'px';
+        gameArea.style.height = H + 'px';
+        gameArea.style.width = W + 'px';
         canvas.width = H;
         canvas.height = W;
     }
@@ -35,11 +39,6 @@ let rect ={
     x: canvas.width/2-(canvas.width/10)/2,
     y: canvas.height-(canvas.height/25)*1.5,
 }
-
-// let rectW = canvas.width/10;
-// let rectH = canvas.height/25;
-// let rectX = canvas.width/2-rectW/2;
-// let rectY = canvas.height-rectH*1.5;
 
 let rectTopDetector = {
     w:rect.w,
@@ -62,114 +61,12 @@ let rectRightDetector ={
     y:rect.y
 }
 
-// let rectLeftY=rectY
-// let rectLeftW=1
-// let rectLeftX=rectX
-// let rectLeftH=rectH
-
-// let rectRightY=rectY
-// let rectRightW=1
-// let rectRightX=rectX+rectW
-// let rectRightH=rectH
-
 function drawRect(){
     ctx.beginPath;
     ctx.fillRect(rect.x,rect.y,rect.w,rect.h);
     ctx.fillStyle = "red";
     ctx.fill()
     ctx.closePath
-}
-
-///////////////////////////////////////////////////ball 
-let ball ={
-    radius: canvas.width/100,
-    x: rect.x+rect.x/2,
-    y: rect.y-canvas.width/100,
-    speedx: canvas.width/200,
-    speedy: -(canvas.height/200),
-}
-
-
-// let ballRadius = canvas.width/100;
-// let ballX=rectX+(rectX/2)
-// let ballY = rectY-ballRadius
-// let speedx = canvas.width/200;
-// let speedy = -(canvas.height/200);
-let life = 3
-function drawBall(){
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
-    ctx.fillStyle = "blue";
-    ctx.fill();
-    ctx.closePath();
-    ball.x+=ball.speedx;
-    ball.y+=ball.speedy;
-}
-
-// function lostBall(){
-//     if (life>0){
-//         if (ballY+ballRadius>canvas.height){
-//             life -= 1
-//             ballX=rectX+(rectW/2)
-//             ballY=rectY-ballRadius
-//         }
-//     }
-//     if (life===0){
-//     }
-// }
-
-/////////////////////////////////////////////////////bricks
-let brick ={
-    w:canvas.width/12,
-    h:canvas.height/15,
-    x:0,
-    y:0,
-    rows:5,
-    columns:Math.floor(canvas.width/(canvas.width/12))
-}
-
-// let brickWidth = canvas.width/12;
-// let brickHeight = canvas.height/15;
-// let brickRowCount = 5;
-// let brickColumnCount = Math.floor(canvas.width/brickWidth);
-let bricks = [];
-for(let c=0; c<brick.columns; c++) {
-    bricks[c] = [];
-    for(let r=0; r<brick.rows; r++) {
-        bricks[c][r] = { x: 0, y: 0, status:1}; 
-    }
-}
-
-
-function drawBricks(){
-    for(let c=0; c<brick.columns; c++) {
-        for(let r=0; r<brick.rows; r++) {
-            if (bricks[c][r].status === 1){
-                brick.x = c*(brick.w);
-                brick.y = r*(brick.h)
-                bricks[c][r].x = brick.x;
-                bricks[c][r].y = brick.y;
-                ctx.beginPath();
-                ctx.rect(brick.x, brick.y, brick.w, brick.h);
-                ctx.strokeRect(brick.x,brick.y,brick.w,brick.h)
-                ctx.fillStyle = "green";
-                ctx.strokeStyle = "white";
-                ctx.fill();
-                ctx.stroke();
-                ctx.closePath();
-            }
-        }
-    }
-}
-
-////////////////////////////////////////////////////////touch
-function touchBorder(){
-    if(ball.x+ball.speedx > canvas.width || ball.x+ball.speedx < 0) {
-        ball.speedx = -ball.speedx;
-    }
-    if(ball.y+ball.speedy > canvas.height || ball.y+ball.speedy < 0) {
-        ball.speedy = -ball.speedy;
-    }
 }
 
 function touchRect(){    
@@ -193,15 +90,90 @@ function touchRect(){
         }
 }
 
+///////////////////////////////////////////////////ball 
+let ball ={
+    radius: canvas.width/100,
+    x: rect.x+rect.x/2,
+    y: rect.y-canvas.width/100,
+    speedx: canvas.width/200,
+    speedy: -(canvas.height/200),
+}
+
+function drawBall(){
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
+    ctx.fillStyle = "blue";
+    ctx.fill();
+    ctx.closePath();
+    ball.x+=ball.speedx;
+    ball.y+=ball.speedy;
+}
+
+function touchBorder(){
+    if(ball.x+ball.speedx > canvas.width || ball.x+ball.speedx < 0) {
+        ball.speedx = -ball.speedx;
+    }
+    if(ball.y+ball.speedy > canvas.height || ball.y+ball.speedy < 0) {
+        ball.speedy = -ball.speedy;
+    }
+}
+// let life = 3
+// function lostBall(){
+//     if (life>0){
+//         if (ballY+ballRadius>canvas.height){
+//             life -= 1
+//             ballX=rectX+(rectW/2)
+//             ballY=rectY-ballRadius
+//         }
+//     }
+//     if (life===0){
+//     }
+// }
+
+/////////////////////////////////////////////////////bricks
+let brick ={
+    w:canvas.width/12,
+    h:canvas.height/15,
+    x:0,
+    y:0,
+    rows:5,
+    columns:Math.floor(canvas.width/(canvas.width/12))
+}
+
+let bricks = [];
+for(let c=0; c<brick.columns; c++) {
+    bricks[c] = [];
+    for(let r=0; r<brick.rows; r++) {
+        bricks[c][r] = { x: 0, y: 0, status:1}; 
+    }
+}
+
+function drawBricks(){
+    for(let c=0; c<brick.columns; c++) {
+        for(let r=0; r<brick.rows; r++) {
+            if (bricks[c][r].status === 1){
+                brick.x = c*(brick.w);
+                brick.y = r*(brick.h)
+                bricks[c][r].x = brick.x;
+                bricks[c][r].y = brick.y;
+                ctx.beginPath();
+                ctx.rect(brick.x, brick.y, brick.w, brick.h);
+                ctx.strokeRect(brick.x,brick.y,brick.w,brick.h)
+                ctx.fillStyle = "green";
+                ctx.strokeStyle = "white";
+                ctx.fill();
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
+    }
+}
+
 function touchBrick(){
     for(var c=0; c<brick.columns; c++) {
         for(var r=0; r<brick.rows; r++) {
             var b = bricks[c][r];
             if (b.status===1){
-                // if(ball.x+ball.radius > b.x && ball.x-ball.radius < b.x+brick.w && ball.y+ball.radius > b.y && ball.y-ball.radius < b.y+brick.h) {
-                //     ball.speedy = -ball.speedy;
-                //     b.status = 0
-                // }
                 let brickTopDetector={
                     w:brick.w,
                     h:1,
@@ -268,7 +240,6 @@ function touchBrick(){
     }
 }
 
-
 /////////////////////////////////////////////////////move
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -329,6 +300,7 @@ function moveRect(){
 
 
 ////////////////////draw
+let currentTime=0
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
@@ -340,5 +312,33 @@ function draw() {
     touchBrick();
     //lostBall()
 }
-setInterval(draw, 16)
+
+const button = document.querySelector('.button');
+button.addEventListener('click', pressButton, false);
+const startBtn = document.getElementById('startBtn')
+const pauseBtn = document.getElementById('pauseBtn')
+const playBtn = document.getElementById('playBtn')
+function pressButton(){
+    let intervalID
+    if(button.id==='startBtn'){
+    startMenu.style.visibility = 'hidden';
+    button.innerHTML = "PAUSE"
+    button.id="pauseBtn"
+    intervalID=setInterval(draw, 16)
+    console.log("start!",button.id)
+    }
+    else if(button.id==='pauseBtn'){
+        button.innerHTML = "PLAY"
+        button.id = "playBtn"
+        currentTime = currentTime
+        console.log("pause!",button.id)
+    }
+    else if(button.id==='playBtn'){
+        button.innerHTML = "PAUSE"
+        button.id = 'pauseBtn'
+        console.log("play!",button.id)
+    }
+    console.log(button.id,intervalID)
+    
 }
+

@@ -2,13 +2,22 @@
 <html>
 <head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
-    <title>my wallbreaker</title>
+    <title>break the wall</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="style.css">  
 </head>
 <body>
     <div id="gameArea">
+        <div id="startMenu">
+            <h1>BREAK THE WALL</h1>
+            <p>Press START to PLAY</p>
+        </div>
         <canvas id="gameCanvas" ></canvas>
-        <div id="HUD"></div>
+        <div id="HUD">
+            <button id="startBtn" class="button">START</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
