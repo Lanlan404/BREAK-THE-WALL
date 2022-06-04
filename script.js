@@ -1,36 +1,52 @@
 //window.onload=function(){
 //////////////////////////////////////////////////window
 const startMenu = document.getElementById('startMenu');
+const button = document.querySelector('.button');
+const gameOver=document.getElementById('gameOver')
+const finalScore=document.getElementById('finalScore')
+let animation
 const gameArea = document.getElementById('gameArea');
-let AR = 16 / 9;
+const AR = 16 / 9;
 let W = window.innerWidth;
 let H = window.innerHeight;
 let newAR = W / H;
+
+
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext("2d");
-window.addEventListener('resize', resizeGame, false);
-window.addEventListener('orientationchange', resizeGame, false);
-function resizeGame() {
-    if (newAR > AR) {
-        W = H * AR;
-        startMenu.style.height = H*0.8 + 'px';
-        startMenu.style.width = W + 'px';
-        gameArea.style.height = H + 'px';
-        gameArea.style.width = W + 'px';
-        canvas.width = W;
-        canvas.height = H;
-    } 
-    else {
-        H = W / AR;
-        startMenu.style.height = H*0.8 + 'px';
-        startMenu.style.width = W + 'px';
-        gameArea.style.height = H + 'px';
-        gameArea.style.width = W + 'px';
-        canvas.width = H;
-        canvas.height = W;
+window.addEventListener('resize', resizeGame)
+function resizeGame(e) {
+    console.log("resize")
+
+    W = window.innerWidth;
+    H = window.innerHeight;
+    newAR = W / H;
+
+    console.log('ratio ecran:', newAR)
+
+    let w, h
+    if (newAR < AR) {
+        console.log('r ecran < 16/9: calcul de h')
+        w = W
+        h = W / AR;
+        canvas.style.width = '100vw'
+        canvas.style.height = 'auto'
+    } else {
+        console.log('r ecran > 16/9: calcul de w')
+        w = H * AR
+        h = H; 
+        canvas.style.width = 'auto'
+        canvas.style.height = '100vh'
     }
-}
-resizeGame()
+
+    // startMenu.style.height = H*0.8 + 'px';
+    // startMenu.style.width = w + 'px';
+    //gameArea.style.height = w + 'px';
+    //gameArea.style.width = w + 'px';
+    canvas.width = w;
+    canvas.height = h;
+  }
+  resizeGame()
 
 /////////////////////////////////////////////////////rect
 let rect ={
@@ -117,18 +133,25 @@ function touchBorder(){
         ball.speedy = -ball.speedy;
     }
 }
-// let life = 3
-// function lostBall(){
-//     if (life>0){
-//         if (ballY+ballRadius>canvas.height){
-//             life -= 1
-//             ballX=rectX+(rectW/2)
-//             ballY=rectY-ballRadius
-//         }
-//     }
-//     if (life===0){
-//     }
-// }
+
+
+let life = 3
+function lostBall(){
+    if (life>0){
+        if (ball.y+ball.radius>canvas.height){
+            life -= 1
+            ball.x=rect.x+(rect.w/2)
+            ball.y=rect.y-ball.radius
+        }
+    }
+    if (life===0){
+        gameOver.style.visibility = 'visible'
+        button.innerHTML="START"
+        button.id="startBtn"
+        finalScore.innerHTML=`SCORE : ${points} points`
+        animation=false
+    }
+}
 
 /////////////////////////////////////////////////////bricks
 let brick ={
@@ -169,6 +192,7 @@ function drawBricks(){
     }
 }
 
+let points = 0
 function touchBrick(){
     for(var c=0; c<brick.columns; c++) {
         for(var r=0; r<brick.rows; r++) {
@@ -208,7 +232,8 @@ function touchBrick(){
                     ball.y-ball.radius+ball.speedy < brickTopDetector.y+brickTopDetector.h){
                     console.log("brick top detector")
                     ball.speedy = -ball.speedy 
-                    b.status = 0     
+                    b.status = 0 
+                    points +=1    
                     }
                 if (ball.x+ball.radius+ball.speedx > brickBottomDetector.x &&
                     ball.x-ball.radius+ball.speedx < brickBottomDetector.x+brickBottomDetector.w &&
@@ -216,7 +241,8 @@ function touchBrick(){
                     ball.y-ball.radius+ball.speedy < brickBottomDetector.y+brickBottomDetector.h){
                     console.log("brick bottom detector")
                     ball.speedy = -ball.speedy
-                    b.status = 0  
+                    b.status = 0 
+                    points +=1
                     }
                 if (ball.x+ball.radius+ball.speedx > brickLeftDetector.x &&
                     ball.x-ball.radius+ball.speedx < brickLeftDetector.x+brickLeftDetector.w &&
@@ -225,6 +251,7 @@ function touchBrick(){
                     console.log("brick left detector")
                     ball.speedx = -ball.speedx
                     b.status = 0
+                    points +=1
                 }
                 if (ball.x+ball.radius+ball.speedx > brickRightDetector.x &&
                     ball.x-ball.radius+ball.speedx < brickRightDetector.x+brickRightDetector.w &&
@@ -233,8 +260,8 @@ function touchBrick(){
                     console.log("brick right detector")
                     ball.speedx = -ball.speedx
                     b.status = 0 
+                    points += 1
                 }
-                      
             }
         }
     }
@@ -299,46 +326,53 @@ function moveRect(){
 }
 
 
-////////////////////draw
-let currentTime=0
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBall();
-    drawRect();
-    moveRect();
-    drawBricks();
-    touchBorder();
-    touchRect();
-    touchBrick();
-    //lostBall()
-}
+///////////////////////////////button
 
-const button = document.querySelector('.button');
 button.addEventListener('click', pressButton, false);
-const startBtn = document.getElementById('startBtn')
-const pauseBtn = document.getElementById('pauseBtn')
-const playBtn = document.getElementById('playBtn')
+
 function pressButton(){
-    let intervalID
     if(button.id==='startBtn'){
+    animation=true
     startMenu.style.visibility = 'hidden';
+    gameOver.style.visibility='hidden';
     button.innerHTML = "PAUSE"
     button.id="pauseBtn"
-    intervalID=setInterval(draw, 16)
     console.log("start!",button.id)
+    draw()
+    life=3
     }
     else if(button.id==='pauseBtn'){
+        animation=false
         button.innerHTML = "PLAY"
         button.id = "playBtn"
-        currentTime = currentTime
         console.log("pause!",button.id)
     }
     else if(button.id==='playBtn'){
+        animation=true
         button.innerHTML = "PAUSE"
         button.id = 'pauseBtn'
         console.log("play!",button.id)
+        draw()
     }
-    console.log(button.id,intervalID)
-    
 }
 
+////////////////////draw
+function draw() {
+    let intervalID
+    if(animation===true){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBall();
+        drawRect();
+        moveRect();
+        drawBricks();
+        touchBorder();
+        touchRect();
+        touchBrick();
+        lostBall();
+    }
+    else{
+        clearInterval(intervalID)
+        return false;}   
+}
+
+intervalID=setInterval(draw,16)

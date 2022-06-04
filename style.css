@@ -1,12 +1,13 @@
-*{
-    margin: 0;
-    padding: 0;
-    overflow:hidden;
-    user-select: none;
-    -moz-user-select: none;
+:root {
+    --fs: 1.2vmin;
+}
+
+*, ::before, ::after {
+    box-sizing: border-box;
 }
 
 body{
+    margin:0;
     display:flex;
     justify-content:center;
     align-items: center;
@@ -14,24 +15,48 @@ body{
     height:100vh;
     background-color: black;
 }
+
+canvas {
+    user-select: none;
+    -moz-user-select: none;
+}
+
+#container {
+    position: relative;
+}
+
 #startMenu{
     background-color: black;
     color:white;
     font-family:'Press Start 2P';
-    font-size:100%;
+    font-size:1.2vmin;
     text-align: center;
     position:absolute;
+    inset: 0;
     border: 5px white solid;
     box-sizing: border-box;
     display:flex;
     flex-direction: column;
 }
-
-#startMenu h1{
+#gameOver{
+    background-color: black;
+    color:white;
+    font-family:'Press Start 2P';
+    font-size:1.2vmin;
+    text-align: center;
+    position:absolute;
+    inset: 0;
+    border: 5px white solid;
+    box-sizing: border-box;
+    display:flex;
+    flex-direction: column;
+    visibility: hidden;
+}
+h1{
     margin:auto
 }
 
-#startMenu p{
+p{
     margin: auto;
 }
 
@@ -42,16 +67,12 @@ body{
   }
 
 #gameCanvas {
-    width: 100%;
-    height: 80%;
     background-color: black;
     border:1px white solid;
     box-sizing:border-box;
 }
 
 #HUD {
-    width: 100%;
-    height: 20%;
     background-color: black;
     border:1px white solid;
     box-sizing:border-box;
@@ -62,9 +83,8 @@ body{
 
 .button{
     width: 25%;
-    height: 80%;
     font-family: 'Press Start 2P';
-    font-size:100%;
+    font-size:var(--fs);
     background-color: black;
     border:1px white solid;
     box-sizing:border-box;
