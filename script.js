@@ -1,4 +1,3 @@
-//window.onload=function(){
 //////////////////////////////////////////////////window
 const startMenu = document.getElementById('startMenu');
 const button = document.querySelector('.button');
@@ -11,19 +10,13 @@ let W = window.innerWidth;
 let H = window.innerHeight;
 let newAR = W / H;
 
-
-const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext("2d");
 window.addEventListener('resize', resizeGame)
-function resizeGame(e) {
+function resizeGame() {
     console.log("resize")
-
     W = window.innerWidth;
     H = window.innerHeight;
     newAR = W / H;
-
     console.log('ratio ecran:', newAR)
-
     let w, h
     if (newAR < AR) {
         console.log('r ecran < 16/9: calcul de h')
@@ -38,113 +31,23 @@ function resizeGame(e) {
         canvas.style.width = 'auto'
         canvas.style.height = '100vh'
     }
-
-    // startMenu.style.height = H*0.8 + 'px';
-    // startMenu.style.width = w + 'px';
-    //gameArea.style.height = w + 'px';
-    //gameArea.style.width = w + 'px';
     canvas.width = w;
     canvas.height = h;
   }
   resizeGame()
 
-/////////////////////////////////////////////////////rect
-let rect ={
-    w: canvas.width/10,
-    h: canvas.height/25,
-    x: canvas.width/2-(canvas.width/10)/2,
-    y: canvas.height-(canvas.height/25)*1.5,
-}
-
-let rectTopDetector = {
-    w:rect.w,
-    h:1,
-    x:rect.x,
-    y:rect.y,
-}
-
-let rectLeftDetector = {
-    w:1,
-    h:rect.h,
-    x:rect.x,
-    y:rect.y,
-}
-
-let rectRightDetector ={
-    w:1,
-    h:rect.h,
-    x:rect.x+rect.w,
-    y:rect.y
-}
-
-function drawRect(){
-    ctx.beginPath;
-    ctx.fillRect(rect.x,rect.y,rect.w,rect.h);
-    ctx.fillStyle = "red";
-    ctx.fill()
-    ctx.closePath
-}
-
-function touchRect(){    
-    if(ball.x+ball.radius+ball.speedx > rectTopDetector.x &&
-       ball.x-ball.radius+ball.speedx < rectTopDetector.x+rectTopDetector.w &&
-       ball.y+ball.radius+ball.speedy > rectTopDetector.y &&
-       ball.y-ball.radius+ball.speedy < rectTopDetector.y+rectTopDetector.h) {
-        console.log("topRectDetector")
-        ball.speedy = -ball.speedy
-        }
-    if((ball.x+ball.radius+ball.speedx > rectLeftDetector.x &&
-        ball.x-ball.radius+ball.speedx < rectLeftDetector.x+rectLeftDetector.w &&
-        ball.y+ball.radius+ball.speedy > rectLeftDetector.y &&
-        ball.y-ball.radius+ball.speedy < rectLeftDetector.y+rectLeftDetector.h)||
-       (ball.x+ball.radius+ball.speedx > rectRightDetector.x &&
-        ball.x-ball.radius+ball.speedx < rectRightDetector.x+rectRightDetector.w &&
-        ball.y+ball.radius+ball.speedy> rectRightDetector.y &&
-        ball.y-ball.radius+ball.speedy< rectRightDetector.y+rectRightDetector.h)){
-        console.log("sideRectDetector")
-        ball.speedx = -ball.speedx
-        }
-}
-
-///////////////////////////////////////////////////ball 
-let ball ={
-    radius: canvas.width/100,
-    x: rect.x+rect.x/2,
-    y: rect.y-canvas.width/100,
-    speedx: canvas.width/200,
-    speedy: -(canvas.height/200),
-}
-
-function drawBall(){
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI*2);
-    ctx.fillStyle = "blue";
-    ctx.fill();
-    ctx.closePath();
-    ball.x+=ball.speedx;
-    ball.y+=ball.speedy;
-}
-
-function touchBorder(){
-    if(ball.x+ball.speedx > canvas.width || ball.x+ball.speedx < 0) {
-        ball.speedx = -ball.speedx;
-    }
-    if(ball.y+ball.speedy > canvas.height || ball.y+ball.speedy < 0) {
-        ball.speedy = -ball.speedy;
-    }
-}
-
-
-let life = 3
+let lives = 3
 function lostBall(){
-    if (life>0){
+    if (lives>0){
         if (ball.y+ball.radius>canvas.height){
-            life -= 1
-            ball.x=rect.x+(rect.w/2)
-            ball.y=rect.y-ball.radius
+            lives -= 1
+            ball.x=canvas.width/2;
+            ball.y=canvas.height-(canvas.height/25)*1.5-(canvas.width/100)
+            ball.speedy=-(canvas.height/200);
+            console.log("lives:",lives)
         }
     }
-    if (life===0){
+    if (lives===0){
         gameOver.style.visibility = 'visible'
         button.innerHTML="START"
         button.id="startBtn"
@@ -153,119 +56,7 @@ function lostBall(){
     }
 }
 
-/////////////////////////////////////////////////////bricks
-let brick ={
-    w:canvas.width/12,
-    h:canvas.height/15,
-    x:0,
-    y:0,
-    rows:5,
-    columns:Math.floor(canvas.width/(canvas.width/12))
-}
-
-let bricks = [];
-for(let c=0; c<brick.columns; c++) {
-    bricks[c] = [];
-    for(let r=0; r<brick.rows; r++) {
-        bricks[c][r] = { x: 0, y: 0, status:1}; 
-    }
-}
-
-function drawBricks(){
-    for(let c=0; c<brick.columns; c++) {
-        for(let r=0; r<brick.rows; r++) {
-            if (bricks[c][r].status === 1){
-                brick.x = c*(brick.w);
-                brick.y = r*(brick.h)
-                bricks[c][r].x = brick.x;
-                bricks[c][r].y = brick.y;
-                ctx.beginPath();
-                ctx.rect(brick.x, brick.y, brick.w, brick.h);
-                ctx.strokeRect(brick.x,brick.y,brick.w,brick.h)
-                ctx.fillStyle = "green";
-                ctx.strokeStyle = "white";
-                ctx.fill();
-                ctx.stroke();
-                ctx.closePath();
-            }
-        }
-    }
-}
-
 let points = 0
-function touchBrick(){
-    for(var c=0; c<brick.columns; c++) {
-        for(var r=0; r<brick.rows; r++) {
-            var b = bricks[c][r];
-            if (b.status===1){
-                let brickTopDetector={
-                    w:brick.w,
-                    h:1,
-                    x:b.x,
-                    y:b.y,
-                }
-                
-                let brickBottomDetector={
-                    w:brick.w,
-                    h:1,
-                    x:b.x,
-                    y:b.y+brick.h,
-                }
-                
-                let brickLeftDetector={
-                    w:1,
-                    h:brick.h,
-                    x:b.x,
-                    y:b.y,
-                }
-                
-                let brickRightDetector={
-                    w:1,
-                    h:brick.h,
-                    x:b.x+brick.w,
-                    y:b.y,
-                }
-
-                if (ball.x+ball.radius+ball.speedx > brickTopDetector.x &&
-                    ball.x-ball.radius+ball.speedx < brickTopDetector.x+brickTopDetector.w &&
-                    ball.y+ball.radius+ball.speedy > brickTopDetector.y &&
-                    ball.y-ball.radius+ball.speedy < brickTopDetector.y+brickTopDetector.h){
-                    console.log("brick top detector")
-                    ball.speedy = -ball.speedy 
-                    b.status = 0 
-                    points +=1    
-                    }
-                if (ball.x+ball.radius+ball.speedx > brickBottomDetector.x &&
-                    ball.x-ball.radius+ball.speedx < brickBottomDetector.x+brickBottomDetector.w &&
-                    ball.y+ball.radius+ball.speedy > brickBottomDetector.y &&
-                    ball.y-ball.radius+ball.speedy < brickBottomDetector.y+brickBottomDetector.h){
-                    console.log("brick bottom detector")
-                    ball.speedy = -ball.speedy
-                    b.status = 0 
-                    points +=1
-                    }
-                if (ball.x+ball.radius+ball.speedx > brickLeftDetector.x &&
-                    ball.x-ball.radius+ball.speedx < brickLeftDetector.x+brickLeftDetector.w &&
-                    ball.y+ball.radius+ball.speedy > brickLeftDetector.y &&
-                    ball.y-ball.radius+ball.speedy < brickLeftDetector.y+brickLeftDetector.h){
-                    console.log("brick left detector")
-                    ball.speedx = -ball.speedx
-                    b.status = 0
-                    points +=1
-                }
-                if (ball.x+ball.radius+ball.speedx > brickRightDetector.x &&
-                    ball.x-ball.radius+ball.speedx < brickRightDetector.x+brickRightDetector.w &&
-                    ball.y+ball.radius+ball.speedy > brickRightDetector.y &&
-                    ball.y-ball.radius+ball.speedy < brickRightDetector.y+brickRightDetector.h){
-                    console.log("brick right detector")
-                    ball.speedx = -ball.speedx
-                    b.status = 0 
-                    points += 1
-                }
-            }
-        }
-    }
-}
 
 /////////////////////////////////////////////////////move
 document.addEventListener("keydown", keyDownHandler, false);
@@ -320,18 +111,17 @@ function moveRect(){
             rect.x = 0;
         }
     }  
-    rectTopDetector.x=rect.x                        // Pourquoi dois-je redéclarer ici? l'initialisation des valeurs de l'objet ne se met pas a jour?
-    rectLeftDetector.x=rect.x
-    rectRightDetector.x=rect.x+rect.w 
+    rect.rectTopDetector.x=rect.x
+    rect.rectLeftDetector.x=rect.x
+    rect.rectRightDetector.x=rect.x+rect.w 
 }
-
-
 ///////////////////////////////button
 
 button.addEventListener('click', pressButton, false);
 
 function pressButton(){
     if(button.id==='startBtn'){
+    start()
     animation=true
     startMenu.style.visibility = 'hidden';
     gameOver.style.visibility='hidden';
@@ -339,7 +129,6 @@ function pressButton(){
     button.id="pauseBtn"
     console.log("start!",button.id)
     draw()
-    life=3
     }
     else if(button.id==='pauseBtn'){
         animation=false
@@ -361,13 +150,18 @@ function draw() {
     let intervalID
     if(animation===true){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawBall();
-        drawRect();
+        ball.drawBall();
+        ball.touchBorder();
+        rect.drawRect();
         moveRect();
-        drawBricks();
-        touchBorder();
-        touchRect();
-        touchBrick();
+        rect.touchRect();
+        console.log("bricks",bricks)
+        
+        bricks.forEach((brick) => {
+            brick.drawBricks();
+            brick.touchBrick();
+        })
+
         lostBall();
     }
     else{
@@ -376,3 +170,52 @@ function draw() {
 }
 
 intervalID=setInterval(draw,16)
+
+let bricks = []
+let b =''
+
+function start(){
+    ball = new Ball()
+    rect = new Rect()
+    for(let c=0; c<12; c++) {
+        //bricks[c] = [];
+        for(let r=0; r<5; r++) {
+            let brick=new Brick()
+            //let brick = bricks[c][r]
+            brick.x=brick.x+brick.w*c
+            brick.y=brick.y+brick.h*r
+            brick.brickTopDetector={
+                w:brick.w,
+                h:1,
+                x:brick.x,
+                y:brick.y,
+            }
+                
+            brick.brickBottomDetector={
+                w:brick.w,
+                h:1,
+                x:brick.x,
+                y:brick.y+brick.h,
+            }
+                
+            brick.brickLeftDetector={
+                w:1,
+                h:brick.h,
+                x:brick.x,
+                y:brick.y,
+            }
+                
+            brick.brickRightDetector={
+                w:1,
+                h:brick.h,
+                x:brick.x+brick.w,
+                y:brick.y,
+            }
+            brick.drawBricks()
+
+            bricks.push(brick)
+        }
+        
+    }
+    lives=3
+}
