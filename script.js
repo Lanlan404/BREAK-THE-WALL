@@ -22,14 +22,14 @@ function resizeGame() {
         console.log('r ecran < 16/9: calcul de h')
         w = W
         h = W / AR;
-        canvas.style.width = '100vw'
+        canvas.style.width = '80vw'
         canvas.style.height = 'auto'
     } else {
         console.log('r ecran > 16/9: calcul de w')
         w = H * AR
         h = H; 
         canvas.style.width = 'auto'
-        canvas.style.height = '100vh'
+        canvas.style.height = '80vh'
     }
     canvas.width = w;
     canvas.height = h;
@@ -146,6 +146,8 @@ function pressButton(){
 }
 
 ////////////////////draw
+const actualscore = document.getElementById("score")
+const remainingLives = document.getElementById("lives")
 function draw() {
     let intervalID
     if(animation===true){
@@ -155,14 +157,13 @@ function draw() {
         rect.drawRect();
         moveRect();
         rect.touchRect();
-        console.log("bricks",bricks)
-        
         bricks.forEach((brick) => {
             brick.drawBricks();
             brick.touchBrick();
         })
-
         lostBall();
+        actualscore.innerHTML =`SCORE : ${points}`
+        remainingLives.innerHTML=`LIVES : ${lives}`
     }
     else{
         clearInterval(intervalID)
@@ -175,13 +176,12 @@ let bricks = []
 let b =''
 
 function start(){
+    points=0
     ball = new Ball()
     rect = new Rect()
     for(let c=0; c<12; c++) {
-        //bricks[c] = [];
         for(let r=0; r<5; r++) {
             let brick=new Brick()
-            //let brick = bricks[c][r]
             brick.x=brick.x+brick.w*c
             brick.y=brick.y+brick.h*r
             brick.brickTopDetector={

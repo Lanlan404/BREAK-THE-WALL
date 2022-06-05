@@ -19,7 +19,6 @@ class Ball {
         this.y+=this.speedy;
     }
     
-
     touchBorder(){
         if(this.x+this.speedx > canvas.width || this.x+this.speedx < 0) {
             this.speedx = -this.speedx;
@@ -162,8 +161,7 @@ class Brick{
                 console.log("brick top detector")
                 ball.speedy = -ball.speedy 
                 this.status = 0 
-                points +=1
-                //this.drawBricks()    
+                points +=1   
             }
             if (ball.x+ball.radius+ball.speedx > this.brickBottomDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickBottomDetector.x+this.brickBottomDetector.w &&
@@ -172,8 +170,7 @@ class Brick{
                 console.log("brick bottom detector")
                 ball.speedy = -ball.speedy
                 this.status = 0 
-                points +=1
-                //this.drawBricks() 
+                points +=1 
             }
             if (ball.x+ball.radius+ball.speedx > this.brickLeftDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickLeftDetector.x+this.brickLeftDetector.w &&
@@ -183,7 +180,6 @@ class Brick{
                 ball.speedx = -ball.speedx
                 this.status = 0
                 points +=1
-                //this.drawBricks() 
             }
             if (ball.x+ball.radius+ball.speedx > this.brickRightDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickRightDetector.x+this.brickRightDetector.w &&
@@ -193,7 +189,6 @@ class Brick{
                 ball.speedx = -ball.speedx
                 this.status = 0 
                 points += 1
-                //this.drawBricks() 
             }
         }
     }

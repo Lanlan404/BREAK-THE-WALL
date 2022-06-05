@@ -15,17 +15,25 @@
         <div id="container">
             <div id="startMenu">
                 <h1>BREAK THE WALL</h1>
-                <p>Press START to PLAY</p>
+                <p class="pressStart">Press START to PLAY</p>
             </div>
             <canvas id="gameCanvas" ></canvas>
             <div id="gameOver">
                 <h1>GAME OVER</h1>
                 <p id="finalScore"></p>
-                <p>Press START to PLAY again</p>
+                <p class="pressStart">Press START to PLAY again</p>
             </div>
         </div>
         <div id="HUD">
-            <button id="startBtn" class="button">START</button>
+            <div id="topHUD">
+                <p id="lives">LIVES : 3</p>
+                <button id="startBtn" class="button">START</button>
+                <p id="score">SCORE : 0</p>
+            </div>
+        <div id = "controls">
+            <p class="controls">[LEFT ARROW] : MOVE LEFT</p>
+           <!-- <p class="controls" id="spacebar">[SPACEBAR] : START/PLAY/PAUSE</p> -->
+            <p class="controls">[RIGHT ARROW] : MOVE RIGHT</p> 
         </div>
     </div>
     <script src="objects.js"></script>
