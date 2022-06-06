@@ -51,6 +51,19 @@ canvas {
     flex-direction: column;
     visibility: hidden;
 }
+
+#youWin{
+    background-color: black;
+    font-size:var(--fs);
+    text-align: center;
+    position:absolute;
+    inset: 0;
+    border: 5px white solid;
+    box-sizing: border-box;
+    display:flex;
+    flex-direction: column;
+    visibility: hidden;
+}
 h1{
     margin:auto
 }

@@ -5,13 +5,13 @@ class Ball {
     constructor() {
         this.x = canvas.width/2;
         this.y = canvas.height-(canvas.height/25)*1.5-(canvas.width/100)
-        this.radius = canvas.width/100;
+        this.radius = canvas.width/80;
         this.speedx= canvas.width/200;
         this.speedy=-(canvas.height/200);
     }
     drawBall(){
-        ctx.fillStyle = "blue";
         ctx.beginPath();
+        ctx.fillStyle = "yellow";
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
         ctx.fill();
         ctx.closePath();
@@ -35,6 +35,7 @@ class Rect {
         this.h=canvas.height/25;
         this.x=canvas.width/2-(canvas.width/10)/2;
         this.y=canvas.height-(canvas.height/25)*1.5;
+        this.speedx=canvas.width/150
 
         this.rectTopDetector= {
             w:this.w,
@@ -58,19 +59,18 @@ class Rect {
     }
     
     drawRect(){
-        ctx.beginPath;
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "blue";
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = "3";
         ctx.fillRect(this.x,this.y,this.w,this.h);
-        
-        ctx.fill()
-        ctx.closePath
+        ctx.strokeRect(this.x,this.y,this.w,this.h);
     }
     touchRect(){
         if(ball.x+ball.radius+ball.speedx > this.rectTopDetector.x &&
            ball.x-ball.radius+ball.speedx < this.rectTopDetector.x+this.rectTopDetector.w &&
            ball.y+ball.radius+ball.speedy > this.rectTopDetector.y &&
            ball.y-ball.radius+ball.speedy < this.rectTopDetector.y+this.rectTopDetector.h) {
-            console.log("topRectDetector")
+            //console.log("topRectDetector")
             ball.speedy = -ball.speedy
             }
         if((ball.x+ball.radius+ball.speedx > this.rectLeftDetector.x &&
@@ -81,7 +81,7 @@ class Rect {
             ball.x-ball.radius+ball.speedx < this.rectRightDetector.x+this.rectRightDetector.w &&
             ball.y+ball.radius+ball.speedy > this.rectRightDetector.y &&
             ball.y-ball.radius+ball.speedy < this.rectRightDetector.y+this.rectRightDetector.h)){
-            console.log("sideRectDetector")
+            //console.log("sideRectDetector")
             ball.speedx = -ball.speedx
             }
     }
@@ -144,7 +144,8 @@ class Brick{
             ctx.beginPath();
             ctx.rect(this.x, this.y, this.w, this.h);
             ctx.strokeRect(this.x,this.y,this.w,this.h)
-            ctx.fillStyle = "green";
+            ctx.fillStyle = "rgb(178,34,34)";
+            ctx.lineWidth ="2";
             ctx.strokeStyle = "white";
             ctx.fill();
             ctx.stroke();
@@ -152,53 +153,76 @@ class Brick{
         }
     }
     
+    rollDice(){
+        let dice = Math.floor(Math.random()*6)
+        console.log("dice=",dice)
+        if (dice===1){
+            this.bonus.status=1
+            console.log("BONUS!")
+        }
+        else{
+            console.log("NO BONUS!")
+            return false
+            
+        }
+    }
+
     touchBrick(){
+        // let touchBrick=false
         if (this.status === 1){
             if (ball.x+ball.radius+ball.speedx > this.brickTopDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickTopDetector.x+this.brickTopDetector.w &&
                 ball.y+ball.radius+ball.speedy > this.brickTopDetector.y &&
                 ball.y-ball.radius+ball.speedy < this.brickTopDetector.y+this.brickTopDetector.h){
-                console.log("brick top detector")
+                //console.log("brick top detector")
                 ball.speedy = -ball.speedy 
                 this.status = 0 
+                // touchBrick=true
                 points +=1
-                this.bonus.status=1
+                this.rollDice()
             }
-            if (ball.x+ball.radius+ball.speedx > this.brickBottomDetector.x &&
+            else if (ball.x+ball.radius+ball.speedx > this.brickBottomDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickBottomDetector.x+this.brickBottomDetector.w &&
                 ball.y+ball.radius+ball.speedy > this.brickBottomDetector.y &&
                 ball.y-ball.radius+ball.speedy < this.brickBottomDetector.y+this.brickBottomDetector.h){
-                console.log("brick bottom detector")
+                //console.log("brick bottom detector")
                 ball.speedy = -ball.speedy
                 this.status = 0 
+                // touchBrick=true
                 points +=1
-                this.bonus.status=1
+                this.rollDice()
             }
-            if (ball.x+ball.radius+ball.speedx > this.brickLeftDetector.x &&
+            else if (ball.x+ball.radius+ball.speedx > this.brickLeftDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickLeftDetector.x+this.brickLeftDetector.w &&
                 ball.y+ball.radius+ball.speedy > this.brickLeftDetector.y &&
                 ball.y-ball.radius+ball.speedy < this.brickLeftDetector.y+this.brickLeftDetector.h){
-                console.log("brick left detector")
+                //console.log("brick left detector")
                 ball.speedx = -ball.speedx
                 this.status = 0
+                // touchBrick=true
                 points +=1
-                this.bonus.status=1
+                this.rollDice()
             }
-            if (ball.x+ball.radius+ball.speedx > this.brickRightDetector.x &&
+            else if (ball.x+ball.radius+ball.speedx > this.brickRightDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickRightDetector.x+this.brickRightDetector.w &&
                 ball.y+ball.radius+ball.speedy > this.brickRightDetector.y &&
                 ball.y-ball.radius+ball.speedy < this.brickRightDetector.y+this.brickRightDetector.h){
-                console.log("brick right detector")
+                //console.log("brick right detector")
                 ball.speedx = -ball.speedx
                 this.status = 0 
-                points += 1
-                this.bonus.status=1
+                // touchBrick=true
+  
+                this.rollDice()
             }
+            // if(touchBrick=true){
+            //     points +=1
+            //     touchBrick=false
+            // }
         }
     }
     drawBonus(){
         if (this.bonus.status===1){
-        ctx.fillStyle = "yellow";
+        ctx.fillStyle = "green";
         ctx.beginPath();
         ctx.arc(this.bonus.x, this.bonus.y, this.bonus.radius, 0, Math.PI*2);
         ctx.fill();
@@ -217,7 +241,7 @@ class Brick{
            this.bonus.y-this.bonus.radius+this.bonus.speedy < rect.y+rect.h) {
              this.bonus.status=0
              this.bonus.speedy=-this.bonus.speedy
-             console.log("bonustouch",this.bonus.status)
+             console.log("bonustouch")
              pickBonus()
         }
     }

@@ -1,8 +1,9 @@
 //////////////////////////////////////////////////window
 const startMenu = document.getElementById('startMenu');
 const button = document.querySelector('.button');
-const gameOver=document.getElementById('gameOver')
-const finalScore=document.getElementById('finalScore')
+const gameOver=document.getElementById('gameOver');
+const youWin=document.getElementById('youWin') ;
+const finalScore=document.querySelector('.finalScore')
 let animation
 const gameArea = document.getElementById('gameArea');
 const AR = 16 / 9;
@@ -22,14 +23,14 @@ function resizeGame() {
         console.log('r ecran < 16/9: calcul de h')
         w = W
         h = W / AR;
-        canvas.style.width = '100vw'
+        canvas.style.width = '90vw'
         canvas.style.height = 'auto'
     } else {
         console.log('r ecran > 16/9: calcul de w')
         w = H * AR
         h = H; 
         canvas.style.width = 'auto'
-        canvas.style.height = '100vh'
+        canvas.style.height = '90vh'
     }
     canvas.width = w;
     canvas.height = h;
@@ -38,25 +39,39 @@ function resizeGame() {
 
 let lives = 3
 function lostBall(){
-    if (lives>0){
+     if (lives>0){
         if (ball.y+ball.radius>canvas.height){
             lives -= 1
-            ball.x=canvas.width/2;
-            ball.y=canvas.height-(canvas.height/25)*1.5-(canvas.width/100)
-            ball.speedy=-(canvas.height/200);
-            console.log("lives:",lives)
+            // ball.x=canvas.width/2;
+            // ball.y=canvas.height-(canvas.height/25)*1.5-(canvas.width/100)
+            // ball.speedy=-(canvas.height/200);
+            // console.log("lives:",lives)
+            ball = new Ball
         }
+        
     }
-    if (lives===0){
+    else if (lives===0){
         gameOver.style.visibility = 'visible'
         button.innerHTML="START"
         button.id="startBtn"
         finalScore.innerHTML=`SCORE : ${points} points`
         animation=false
     }
+            
 }
 
-let points = 0
+function winGame(){
+    if (points===60){
+        youWin.style.visibility='visible'
+        button.innerHTML="START"
+        button.id="startBtn"
+        finalScore.innerHTML=`SCORE : ${points} points`
+        animation=false
+    }
+    else{return false}
+}
+
+let points
 
 /////////////////////////////////////////////////////move
 document.addEventListener("keydown", keyDownHandler, false);
@@ -100,13 +115,13 @@ function mobileStopTouch(e){
 
 function moveRect(){
     if(rightPressed) {
-        rect.x += canvas.width/175;
-        if (rect.x + rect.w > canvas.width){
+        rect.x += rect.speedx
+        if (rect.x + rect.w +rect.speedx > canvas.width){
             rect.x = canvas.width - rect.w;
         } 
     }
     else if(leftPressed) {
-        rect.x -= canvas.width/175;
+        rect.x -= rect.speedx
         if (rect.x < 0){
             rect.x = 0;
         }
@@ -148,6 +163,7 @@ function pressButton(){
 ////////////////////draw
 const actualscore = document.getElementById("score")
 const remainingLives = document.getElementById("lives")
+let frame
 function draw() {
     let intervalID
     if(animation===true){
@@ -164,8 +180,10 @@ function draw() {
             brick.touchBonus();
         })
         lostBall();
+        winGame();
         actualscore.innerHTML =`SCORE : ${points}`
         remainingLives.innerHTML=`LIVES : ${lives}`
+        frame++
     }
     else{
         clearInterval(intervalID)
@@ -175,7 +193,6 @@ function draw() {
 intervalID=setInterval(draw,16)
 
 let bricks = []
-//let b =''
 
 function start(){
     points=0
@@ -186,6 +203,7 @@ function start(){
             let brick=new Brick()
             brick.x=brick.x+brick.w*c
             brick.y=brick.y+brick.h*r
+            // brick.bonus = new Bonus(brick.x+brick.w/2, brick.y+brick.h/2, ...)
             brick.bonus={
                 x:brick.x+brick.w/2,
                 y:brick.y+brick.h/2,
@@ -230,50 +248,155 @@ function start(){
     lives=3
 }
 
+// class Bonus {
+//     constructor(x, y, ...) {
+//         this.x = x
+//         this.y = 
+//         this.speedy
+//         this.status = 
 
+//         this.int = undefined
+//     }
+//     draw() {}
+//     on() {}
+//     off() {}
+// }
+
+// const bonuses = {
+//     'large': {
+//         int: undefined,
+//         on: function () {
+//             rect.w+=canvas.width/10
+//             rect.rectTopDetector.w+=canvas.width/10
+
+//             if (this.int) clearTimeout(this.int)
+
+//             this.int=setTimeout(this.off,10000)
+//         },
+//         off: function () {
+//             rect.w=Rect.PLATEFORM_WIDTH
+//             rect.rectTopDetector.w=Rect.PLATEFORM_WIDTH
+//         },
+//     },
+//     // ...
+// }
+
+
+let bonusInt
 let bonusArr=[
     function largeRect(){
         console.log("largeRect")
-        rect.w+=canvas.width/10
-        rect.rectTopDetector.w+=canvas.width/10
+        rect.w*=1.5
+        rect.rectTopDetector.w*=1.5
+        if (bonusInt){
+            clearTimeout(bonusInt)
+        }
+        bonusInt=setTimeout(function(){
+            rect.w=canvas.width/10;
+            rect.rectTopDetector.w=canvas.width/10;
+        },7500)
     },
-    // function smallRect(){
-    //     console.log("smallRect")
-    // },
-    // function speedRect(){
-    //     console.log("speedRect")
-    // },
-    // function slowRect(){
-    //     console.log("slowRect")
-    // },
-    // function largeBall(){
-    //     console.log("largeBall")
-    // },
-    // function smallBall(){
-    //     console.log("smallBall")
-    // },
-    // function speedBall(){
-    //     console.log("speedBall")
-    // },
-    // function smallBall(){
-    //     console.log("smallBall")
-    // },
-    // function doublePoints(){
-    //     console.log("doublePoints")
-    // }
+    function smallRect(){
+        console.log("smallRect")
+        rect.w/=1.5
+        rect.rectTopDetector.w/=1.5
+        if (bonusInt){
+            clearTimeout(bonusInt)
+        }
+        bonusInt=setTimeout(function(){
+            rect.w=canvas.width/10;
+            rect.rectTopDetector.w=canvas.width/10;
+        },7500)
+    },
+    function speedRect(){
+        console.log("speedRect")
+        rect.speedx*=2
+        if (bonusInt){
+            clearTimeout(bonusInt)
+        }
+        bonusInt=setTimeout(function(){
+            rect.speedx=canvas.width/150
+        },7500)
+    },
+    function slowRect(){
+        console.log("slowRect")
+        rect.speedx/=2
+        if (bonusInt){
+            clearTimeout(bonusInt)
+        }
+        bonusInt=setTimeout(function(){
+            rect.speedx=canvas.width/150
+        },7500)
+    },
+    function largeBall(){
+        console.log("largeBall")
+        ball.radius*=2
+        if (bonusInt){
+            clearTimeout(bonusInt)
+        }
+        bonusInt=setTimeout(function(){
+            ball.radius = canvas.width/80;
+        },7500)
+    },
+    function smallBall(){
+        console.log("smallBall")
+        ball.radius/=2
+        if (bonusInt){
+            clearTimeout(bonusInt)
+        }
+        bonusInt=setTimeout(function(){
+            ball.radius = canvas.width/80;
+        },7500)
+    },
+    function speedBall(){
+        console.log("speedBall")
+        ball.speedx*=2
+        ball.speedy*=2
+        if (bonusInt){
+            clearTimeout(bonusInt)
+        }
+        bonusInt=setTimeout(function(){
+            if(ball.speedx>0){
+                ball.speedx= canvas.width/200;
+                }
+                if (ball.speedx>0){
+                ball.speedx = -(canvas.width/200);
+                }
+                if (ball.speedy<0){
+                ball.speedy= -(canvas.height/200);
+                }
+                if (ball.speedy>0){
+                ball.speedy = canvas.height/200
+                }
+        },7500)
+    },
+    function slowBall(){
+        console.log("slowBall")
+        ball.speedx/=2
+        ball.speedy/=2
+        if (bonusInt){
+            clearTimeout(bonusInt)
+        }
+        bonusInt=setTimeout(function(){
+            if(ball.speedx>0){
+            ball.speedx= canvas.width/200;
+            }
+            if (ball.speedx>0){
+            ball.speedx = -(canvas.width/200);
+            }
+            if (ball.speedy<0){
+            ball.speedy= -(canvas.height/200);
+            }
+            if (ball.speedy>0){
+            ball.speedy = canvas.height/200
+            }
+        },6000)
+    },
 ]
 
 function pickBonus(){
-    let dice = Math.floor(Math.random()*2)
-    if (dice===1){
-            let randomIndex =Math.floor(Math.random()*bonusArr.length) 
-            console.log("dice=",dice ,"BONUS!")
-            return bonusArr[randomIndex]()
-        
+    console.log("pickbonus!")
+            let randomIndex = Math.floor(Math.random()*bonusArr.length) 
+            return bonusArr[randomIndex]() 
     }
-    else{
-        console.log("dice=",dice ,"NO BONUS!")
-        return false
-    }
-}
 
