@@ -87,8 +87,6 @@ class Rect {
     }
 }
 
-
-
 class Brick{
     constructor(){
         this.w=canvas.width/12;
@@ -98,7 +96,11 @@ class Brick{
         this.rows=5;
         this.columns=Math.floor(canvas.width/(canvas.width/12))
         this.status=1
-
+        // this.bonusX= this.x+this.w/2;
+        // this.bonusY = this.y+this.h/2;
+        // this.bonusRadius= canvas.width/100;
+        // this.bonusSpeedy=canvas.height/200;
+        // this.bonusStatus=1;
         // this.bricks=[]
         // for(let c=0; c<this.columns; c++) {
         //     this.bricks[c] = [];
@@ -135,7 +137,7 @@ class Brick{
         //     }
         // }
     }       
-
+     
             
     drawBricks(){
         if (this.status === 1){
@@ -149,9 +151,7 @@ class Brick{
             ctx.closePath();
         }
     }
-
-
- 
+    
     touchBrick(){
         if (this.status === 1){
             if (ball.x+ball.radius+ball.speedx > this.brickTopDetector.x &&
@@ -161,7 +161,8 @@ class Brick{
                 console.log("brick top detector")
                 ball.speedy = -ball.speedy 
                 this.status = 0 
-                points +=1   
+                points +=1
+                this.bonus.status=1
             }
             if (ball.x+ball.radius+ball.speedx > this.brickBottomDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickBottomDetector.x+this.brickBottomDetector.w &&
@@ -170,7 +171,8 @@ class Brick{
                 console.log("brick bottom detector")
                 ball.speedy = -ball.speedy
                 this.status = 0 
-                points +=1 
+                points +=1
+                this.bonus.status=1
             }
             if (ball.x+ball.radius+ball.speedx > this.brickLeftDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickLeftDetector.x+this.brickLeftDetector.w &&
@@ -180,6 +182,7 @@ class Brick{
                 ball.speedx = -ball.speedx
                 this.status = 0
                 points +=1
+                this.bonus.status=1
             }
             if (ball.x+ball.radius+ball.speedx > this.brickRightDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickRightDetector.x+this.brickRightDetector.w &&
@@ -189,7 +192,34 @@ class Brick{
                 ball.speedx = -ball.speedx
                 this.status = 0 
                 points += 1
+                this.bonus.status=1
             }
         }
     }
+    drawBonus(){
+        if (this.bonus.status===1){
+        ctx.fillStyle = "yellow";
+        ctx.beginPath();
+        ctx.arc(this.bonus.x, this.bonus.y, this.bonus.radius, 0, Math.PI*2);
+        ctx.fill();
+        ctx.closePath();
+        this.bonus.y+=this.bonus.speedy
+        }
+        else{
+        ctx.fillStyle ="rgba(0, 0, 0, 0)"
+        }
+    }
+
+    touchBonus(){
+        if(this.bonus.x+this.bonus.radius > rect.x &&
+           this.bonus.x-this.bonus.radius < rect.x+rect.w &&
+           this.bonus.y+this.bonus.radius+this.bonus.speedy > rect.y &&
+           this.bonus.y-this.bonus.radius+this.bonus.speedy < rect.y+rect.h) {
+             this.bonus.status=0
+             this.bonus.speedy=-this.bonus.speedy
+             console.log("bonustouch",this.bonus.status)
+             pickBonus()
+        }
+    }
 }
+

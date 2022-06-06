@@ -160,6 +160,8 @@ function draw() {
         bricks.forEach((brick) => {
             brick.drawBricks();
             brick.touchBrick();
+            brick.drawBonus();
+            brick.touchBonus();
         })
         lostBall();
         actualscore.innerHTML =`SCORE : ${points}`
@@ -184,6 +186,15 @@ function start(){
             let brick=new Brick()
             brick.x=brick.x+brick.w*c
             brick.y=brick.y+brick.h*r
+            brick.bonus={
+                x:brick.x+brick.w/2,
+                y:brick.y+brick.h/2,
+                radius:canvas.width/100,
+                speedy:canvas.height/400,
+                status:0,
+            }
+            brick.bonusX=brick.x+brick.w/2
+            brick.bonusY=brick.y+brick.h/2
             brick.brickTopDetector={
                 w:brick.w,
                 h:1,
@@ -212,10 +223,56 @@ function start(){
                 y:brick.y,
             }
             brick.drawBricks()
-
             bricks.push(brick)
         }
         
     }
     lives=3
 }
+
+
+let bonusArr=[
+    function largeRect(){
+        console.log("largeRect")
+        rect.w+=canvas.width/10
+    },
+    // function smallRect(){
+    //     console.log("smallRect")
+    // },
+    // function speedRect(){
+    //     console.log("speedRect")
+    // },
+    // function slowRect(){
+    //     console.log("slowRect")
+    // },
+    // function largeBall(){
+    //     console.log("largeBall")
+    // },
+    // function smallBall(){
+    //     console.log("smallBall")
+    // },
+    // function speedBall(){
+    //     console.log("speedBall")
+    // },
+    // function smallBall(){
+    //     console.log("smallBall")
+    // },
+    // function doublePoints(){
+    //     console.log("doublePoints")
+    // }
+]
+
+function pickBonus(){
+    let dice = Math.floor(Math.random()*2)
+    if (dice===1){
+            let randomIndex =Math.floor(Math.random()*bonusArr.length) 
+            console.log("dice=",dice ,"BONUS!")
+            return bonusArr[randomIndex]()
+        
+    }
+    else{
+        console.log("dice=",dice ,"NO BONUS!")
+        return false
+    }
+}
+
