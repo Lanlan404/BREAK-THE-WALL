@@ -22,14 +22,14 @@ function resizeGame() {
         console.log('r ecran < 16/9: calcul de h')
         w = W
         h = W / AR;
-        canvas.style.width = '80vw'
+        canvas.style.width = '100vw'
         canvas.style.height = 'auto'
     } else {
         console.log('r ecran > 16/9: calcul de w')
         w = H * AR
         h = H; 
         canvas.style.width = 'auto'
-        canvas.style.height = '80vh'
+        canvas.style.height = '100vh'
     }
     canvas.width = w;
     canvas.height = h;
@@ -175,7 +175,7 @@ function draw() {
 intervalID=setInterval(draw,16)
 
 let bricks = []
-let b =''
+//let b =''
 
 function start(){
     points=0
@@ -235,6 +235,7 @@ let bonusArr=[
     function largeRect(){
         console.log("largeRect")
         rect.w+=canvas.width/10
+        rect.rectTopDetector.w+=canvas.width/10
     },
     // function smallRect(){
     //     console.log("smallRect")
