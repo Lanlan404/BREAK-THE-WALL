@@ -1,25 +1,54 @@
-//////////////////////////////////////////////////window
+//html Elements
+const gameArea = document.getElementById('gameArea');
 const startMenu = document.getElementById('startMenu');
 const button = document.querySelector('.button');
 const gameOver=document.getElementById('gameOver');
 const youWin=document.getElementById('youWin') ;
 const finalScore=document.querySelector('.finalScore')
+const actualscore = document.getElementById("score")
+const remainingLives = document.getElementById("lives")
 const bonusEl=document.getElementById('bonus')
+const volumeDownBtn=document.getElementById('volumeDown')
+const volumeUpBtn=document.getElementById('volumeUp')
 
-let animation
-const gameArea = document.getElementById('gameArea');
+
+//event Listeners
+window.addEventListener('resize', resizeGame)
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("touchstart", mobileTouch,false);
+document.addEventListener("touchend",mobileStopTouch,false);
+button.addEventListener('click', pressStart, false);
+volumeDownBtn.addEventListener('click', volumeDown)
+volumeUpBtn.addEventListener('click',volumeUp)
+
+
+//variables
 const AR = 16 / 9;
 let W = window.innerWidth;
 let H = window.innerHeight;
 let newAR = W / H;
+let rightPressed = false;
+let leftPressed = false;
+let animation
+let lives = 3
+let points
+let bricks = []
+let bonusInt
+
+
+//sounds
 let boing = new Audio("sounds/boing.mp3")
 let cri = new Audio("sounds/cri.mp3")
 let pop = new Audio("sounds/pop.mp3")
 let ooh = new Audio("sounds/ooh.mp3")
 let bouh = new Audio("sounds/bouh.mp3")
 let ouais = new Audio("sounds/ouais.mp3")
+let pouet = new Audio("sounds/pouet.mp3")
+let mariocoin = new Audio("sounds/mario-coin.mp3")
 
-window.addEventListener('resize', resizeGame)
+
+// sizing
 function resizeGame() {
     console.log("resize")
     W = window.innerWidth;
@@ -43,9 +72,10 @@ function resizeGame() {
     canvas.width = w;
     canvas.height = h;
   }
-  resizeGame()
+resizeGame()
 
-let lives = 3
+
+// win/lose
 function lostBall(){
      if (lives>0){
         if (ball.y+ball.radius>canvas.height){
@@ -81,15 +111,8 @@ function winGame(){
     }
 }
 
-let points
 
-/////////////////////////////////////////////////////move
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("touchstart", mobileTouch,false);
-document.addEventListener("touchend",mobileStopTouch,false);
-let rightPressed = false;
-let leftPressed = false;
+// move
 function keyDownHandler(e) {
     if(e.key == "Right" || e.key == "ArrowRight") {
         rightPressed = true;
@@ -140,10 +163,8 @@ function moveRect(){
     rect.rectLeftDetector.x=rect.x
     rect.rectRightDetector.x=rect.x+rect.w 
 }
-///////////////////////////////button
 
-button.addEventListener('click', pressStart, false);
-
+// interface
 function pressStart(){
     if(button.id==='startBtn'){
     start()
@@ -153,6 +174,7 @@ function pressStart(){
     button.innerHTML = "PAUSE"
     button.id="pauseBtn"
     console.log("start!",button.id)
+    mariocoin.play()
     draw()
     }
     else if(button.id==='pauseBtn'){
@@ -170,40 +192,34 @@ function pressStart(){
     }
 }
 
-////////////////////draw
-const actualscore = document.getElementById("score")
-const remainingLives = document.getElementById("lives")
-let frame
-function draw() {
-    let intervalID
-    if(animation===true){
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ball.drawBall();
-        ball.touchBorder();
-        rect.drawRect();
-        moveRect();
-        rect.touchRect();
-        bricks.forEach((brick) => {
-            brick.drawBricks();
-            brick.touchBrick();
-            brick.drawBonus();
-            brick.touchBonus();
-        })
-        lostBall();
-        winGame();
-        actualscore.innerHTML =`SCORE : ${points}`
-        remainingLives.innerHTML=`LIVES : ${lives}`
-        frame++
-    }
-    else{
-        clearInterval(intervalID)
-        return false;}   
+function volumeDown(){
+    console.log("volumeDown")
+    boing.volume-=0.1
+    bouh.volume-=0.1
+    cri.volume-=0.1
+    ooh.volume-=0.1
+    ouais.volume-=0.1
+    pop.volume-=0.1
+    pouet.volume-=0.1
+    mariocoin.volume-=0.1
+    pop.play()
 }
 
-intervalID=setInterval(draw,16)
+function volumeUp(){
+    console.log("volumeUp")
+    boing.volume+=0.1
+    bouh.volume+=0.1
+    cri.volume+=0.1
+    ooh.volume+=0.1
+    ouais.volume+=0.1
+    pop.volume+=0.1
+    pouet.volume+=0.1
+    mariocoin.volume+=0.1
+    pop.play()
+}
 
-let bricks = []
 
+//game
 function start(){
     points=0
     ball = new Ball()
@@ -258,40 +274,34 @@ function start(){
     lives=3
 }
 
-// class Bonus {
-//     constructor(x, y, ...) {
-//         this.x = x
-//         this.y = 
-//         this.speedy
-//         this.status = 
+function draw() {
+    let intervalID
+    if(animation===true){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ball.drawBall();
+        ball.touchBorder();
+        rect.drawRect();
+        moveRect();
+        rect.touchRect();
+        bricks.forEach((brick) => {
+            brick.drawBricks();
+            brick.touchBrick();
+            brick.drawBonus();
+            brick.touchBonus();
+        })
+        lostBall();
+        winGame();
+        actualscore.innerHTML =`SCORE : ${points}`
+        remainingLives.innerHTML=`LIVES : ${lives}`
+    }
+    else{
+        clearInterval(intervalID)
+        return false;}   
+}
+intervalID=setInterval(draw,16)
 
-//         this.int = undefined
-//     }
-//     draw() {}
-//     on() {}
-//     off() {}
-// }
 
-// const bonuses = {
-//     'large': {
-//         int: undefined,
-//         on: function () {
-//             rect.w+=canvas.width/10
-//             rect.rectTopDetector.w+=canvas.width/10
-
-//             if (this.int) clearTimeout(this.int)
-
-//             this.int=setTimeout(this.off,10000)
-//         },
-//         off: function () {
-//             rect.w=Rect.PLATEFORM_WIDTH
-//             rect.rectTopDetector.w=Rect.PLATEFORM_WIDTH
-//         },
-//     },
-//     // ...
-// }
-
-let bonusInt
+// bonus
 let bonusArr=[
     function largeRect(){
         console.log("largeRect")
@@ -433,29 +443,43 @@ function pickBonus(){
     console.log("pickbonus!",bonusArr[randomIndex])
     return bonusArr[randomIndex]() 
 }
-const volumeDownBtn=document.getElementById('volumeDown')
-const volumeUpBtn=document.getElementById('volumeUp')
-volumeDownBtn.addEventListener('click', volumeDown)
-volumeUpBtn.addEventListener('click',volumeUp)
-function volumeDown(){
-        console.log("volumeDown")
-        boing.volume-=0.1
-        bouh.volume-=0.1
-        cri.volume-=0.1
-        ooh.volume-=0.1
-        ouais.volume-=0.1
-        pop.volume-=0.1
-        pop.play()
-}
 
-function volumeUp(){
-        console.log("volumeUp")
-        boing.volume+=0.1
-        bouh.volume+=0.1
-        cri.volume+=0.1
-        ooh.volume+=0.1
-        ouais.volume+=0.1
-        pop.volume+=0.1
-        pop.play()
-}
+
+// class Bonus {
+//     constructor(x, y, ...) {
+//         this.x = x
+//         this.y = 
+//         this.speedy
+//         this.status = 
+
+//         this.int = undefined
+//     }
+//     draw() {}
+//     on() {}
+//     off() {}
+// }
+
+// const bonuses = {
+//     'large': {
+//         int: undefined,
+//         on: function () {
+//             rect.w+=canvas.width/10
+//             rect.rectTopDetector.w+=canvas.width/10
+
+//             if (this.int) clearTimeout(this.int)
+
+//             this.int=setTimeout(this.off,10000)
+//         },
+//         off: function () {
+//             rect.w=Rect.PLATEFORM_WIDTH
+//             rect.rectTopDetector.w=Rect.PLATEFORM_WIDTH
+//         },
+//     },
+//     // ...
+// }
+
+
+
+
+
 

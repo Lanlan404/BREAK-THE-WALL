@@ -245,8 +245,7 @@ class Brick{
              this.bonus.speedy=-this.bonus.speedy
              console.log("bonustouch")
              pickBonus()
-             pop.play()
+             pouet.play()
         }
     }
 }
-
