@@ -111,10 +111,21 @@ h1{
     font-family: 'Press Start 2P';
 }
 
-#lives, #score{
+#lives, #score,#bonus{
     border: 1px white solid;
     font-size: var(--fs);
     padding:1em
+}
+
+#muteBtn{
+    font-size:var(--fs);
+    background-color: black;
+    border:1px white solid;
+    border-radius: 10%;
+    margin: 1em;
+    font-family: 'Press Start 2P';
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 #controls{

@@ -72,6 +72,7 @@ class Rect {
            ball.y-ball.radius+ball.speedy < this.rectTopDetector.y+this.rectTopDetector.h) {
             //console.log("topRectDetector")
             ball.speedy = -ball.speedy
+            cri.play();
             }
         if((ball.x+ball.radius+ball.speedx > this.rectLeftDetector.x &&
             ball.x-ball.radius+ball.speedx < this.rectLeftDetector.x+this.rectLeftDetector.w &&
@@ -83,6 +84,7 @@ class Rect {
             ball.y-ball.radius+ball.speedy < this.rectRightDetector.y+this.rectRightDetector.h)){
             //console.log("sideRectDetector")
             ball.speedx = -ball.speedx
+            cri.play()
             }
     }
 }
@@ -161,7 +163,7 @@ class Brick{
             console.log("BONUS!")
         }
         else{
-            console.log("NO BONUS!")
+            //console.log("NO BONUS!")
             return false
             
         }
@@ -177,9 +179,10 @@ class Brick{
                 //console.log("brick top detector")
                 ball.speedy = -ball.speedy 
                 this.status = 0 
-                // touchBrick=true
                 points +=1
                 this.rollDice()
+                boing.currentTime=0
+                boing.play()
             }
             else if (ball.x+ball.radius+ball.speedx > this.brickBottomDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickBottomDetector.x+this.brickBottomDetector.w &&
@@ -188,9 +191,10 @@ class Brick{
                 //console.log("brick bottom detector")
                 ball.speedy = -ball.speedy
                 this.status = 0 
-                // touchBrick=true
                 points +=1
                 this.rollDice()
+                boing.currentTime=0
+                boing.play()
             }
             else if (ball.x+ball.radius+ball.speedx > this.brickLeftDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickLeftDetector.x+this.brickLeftDetector.w &&
@@ -199,9 +203,10 @@ class Brick{
                 //console.log("brick left detector")
                 ball.speedx = -ball.speedx
                 this.status = 0
-                // touchBrick=true
                 points +=1
                 this.rollDice()
+                boing.currentTime=0
+                boing.play()
             }
             else if (ball.x+ball.radius+ball.speedx > this.brickRightDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickRightDetector.x+this.brickRightDetector.w &&
@@ -210,16 +215,13 @@ class Brick{
                 //console.log("brick right detector")
                 ball.speedx = -ball.speedx
                 this.status = 0 
-                // touchBrick=true
-  
                 this.rollDice()
+                boing.currentTime=0
+                boing.play()
             }
-            // if(touchBrick=true){
-            //     points +=1
-            //     touchBrick=false
-            // }
         }
     }
+
     drawBonus(){
         if (this.bonus.status===1){
         ctx.fillStyle = "green";
@@ -239,10 +241,11 @@ class Brick{
            this.bonus.x-this.bonus.radius < rect.x+rect.w &&
            this.bonus.y+this.bonus.radius+this.bonus.speedy > rect.y &&
            this.bonus.y-this.bonus.radius+this.bonus.speedy < rect.y+rect.h) {
-             this.bonus.status=0
+             //this.bonus.status=0
              this.bonus.speedy=-this.bonus.speedy
              console.log("bonustouch")
              pickBonus()
+             pop.play()
         }
     }
 }

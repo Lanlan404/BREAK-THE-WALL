@@ -4,12 +4,20 @@ const button = document.querySelector('.button');
 const gameOver=document.getElementById('gameOver');
 const youWin=document.getElementById('youWin') ;
 const finalScore=document.querySelector('.finalScore')
+const bonusEl=document.getElementById('bonus')
+
 let animation
 const gameArea = document.getElementById('gameArea');
 const AR = 16 / 9;
 let W = window.innerWidth;
 let H = window.innerHeight;
 let newAR = W / H;
+let boing = new Audio("sounds/boing.mp3")
+let cri = new Audio("sounds/cri.mp3")
+let pop = new Audio("sounds/pop.mp3")
+let ooh = new Audio("sounds/ooh.mp3")
+let bouh = new Audio("sounds/bouh.mp3")
+let ouais = new Audio("sounds/ouais.mp3")
 
 window.addEventListener('resize', resizeGame)
 function resizeGame() {
@@ -47,6 +55,7 @@ function lostBall(){
             // ball.speedy=-(canvas.height/200);
             // console.log("lives:",lives)
             ball = new Ball
+            ooh.play()
         }
         
     }
@@ -56,6 +65,7 @@ function lostBall(){
         button.id="startBtn"
         finalScore.innerHTML=`SCORE : ${points} points`
         animation=false
+        bouh.play()
     }
             
 }
@@ -67,8 +77,8 @@ function winGame(){
         button.id="startBtn"
         finalScore.innerHTML=`SCORE : ${points} points`
         animation=false
+        ouais.play()
     }
-    else{return false}
 }
 
 let points
@@ -132,9 +142,9 @@ function moveRect(){
 }
 ///////////////////////////////button
 
-button.addEventListener('click', pressButton, false);
+button.addEventListener('click', pressStart, false);
 
-function pressButton(){
+function pressStart(){
     if(button.id==='startBtn'){
     start()
     animation=true
@@ -281,7 +291,6 @@ function start(){
 //     // ...
 // }
 
-
 let bonusInt
 let bonusArr=[
     function largeRect(){
@@ -358,16 +367,16 @@ let bonusArr=[
         bonusInt=setTimeout(function(){
             if(ball.speedx>0){
                 ball.speedx= canvas.width/200;
-                }
-                if (ball.speedx>0){
+            }
+            if(ball.speedx>0){
                 ball.speedx = -(canvas.width/200);
-                }
-                if (ball.speedy<0){
+            }
+            if (ball.speedy<0){
                 ball.speedy= -(canvas.height/200);
-                }
-                if (ball.speedy>0){
+            }
+            if (ball.speedy>0){
                 ball.speedy = canvas.height/200
-                }
+            }
         },7500)
     },
     function slowBall(){
@@ -379,24 +388,59 @@ let bonusArr=[
         }
         bonusInt=setTimeout(function(){
             if(ball.speedx>0){
-            ball.speedx= canvas.width/200;
+                ball.speedx= canvas.width/200;
             }
             if (ball.speedx>0){
-            ball.speedx = -(canvas.width/200);
+                ball.speedx = -(canvas.width/200);
             }
             if (ball.speedy<0){
-            ball.speedy= -(canvas.height/200);
+                ball.speedy= -(canvas.height/200);
             }
             if (ball.speedy>0){
-            ball.speedy = canvas.height/200
+                ball.speedy = canvas.height/200
             }
         },6000)
     },
+    function multiBall(){
+        console.log("multiBall")
+        ball2 = new Ball()
+    },
+    function extraLife(){
+        lives+=1
+    }
 ]
 
 function pickBonus(){
-    console.log("pickbonus!")
-            let randomIndex = Math.floor(Math.random()*bonusArr.length) 
-            return bonusArr[randomIndex]() 
+    let randomIndex = Math.floor(Math.random()*bonusArr.length) 
+    console.log("pickbonus!",bonusArr[randomIndex])
+    return bonusArr[randomIndex]() 
+}
+const muteBtn=document.getElementById('muteBtn')
+window.addEventListener('click', mute)
+let muteStatus=1
+function mute(){
+    
+    
+    if(muteStatus===0){
+        console.log("mute!")
+        boing.volume = 0
+        bouh.volume=0
+        cri.volume=0
+        ooh.volume=0
+        ouais.volume=0
+        muteStatus=1
+        muteBtn.innerHTML="UNMUTE AUDIO"
+        
+    }
+    else{
+        console.log("unmute!")
+        boing.volume = 1
+        bouh.volume=1
+        cri.volume=1
+        ooh.volume=1
+        ouais.volume=1
+        muteStatus=0
+        muteBtn.innerHTML="MUTE AUDIO"
+    }
     }
 
