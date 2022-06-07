@@ -297,16 +297,19 @@ let bonusArr=[
         console.log("largeRect")
         rect.w*=1.5
         rect.rectTopDetector.w*=1.5
+        bonusEl.innerHTML="PADDLE SIZE +"
         if (bonusInt){
             clearTimeout(bonusInt)
         }
         bonusInt=setTimeout(function(){
             rect.w=canvas.width/10;
             rect.rectTopDetector.w=canvas.width/10;
+            bonusEl.innerHTML="NO BONUS"
         },7500)
     },
     function smallRect(){
         console.log("smallRect")
+        bonusEl.innerHTML="PADDLE SIZE -"
         rect.w/=1.5
         rect.rectTopDetector.w/=1.5
         if (bonusInt){
@@ -315,50 +318,60 @@ let bonusArr=[
         bonusInt=setTimeout(function(){
             rect.w=canvas.width/10;
             rect.rectTopDetector.w=canvas.width/10;
+            bonusEl.innerHTML="NO BONUS"
         },7500)
     },
     function speedRect(){
         console.log("speedRect")
+        bonusEl.innerHTML="PADDLE SPEED +"
         rect.speedx*=2
         if (bonusInt){
             clearTimeout(bonusInt)
         }
         bonusInt=setTimeout(function(){
             rect.speedx=canvas.width/150
+            bonusEl.innerHTML="NO BONUS"
         },7500)
     },
     function slowRect(){
         console.log("slowRect")
+        bonusEl.innerHTML="PADDLE SPEED -"
         rect.speedx/=2
         if (bonusInt){
             clearTimeout(bonusInt)
         }
         bonusInt=setTimeout(function(){
             rect.speedx=canvas.width/150
+            bonusEl.innerHTML="NO BONUS"
         },7500)
     },
     function largeBall(){
         console.log("largeBall")
+        bonusEl.innerHTML="BALL SIZE +"
         ball.radius*=2
         if (bonusInt){
             clearTimeout(bonusInt)
         }
         bonusInt=setTimeout(function(){
             ball.radius = canvas.width/80;
+            bonusEl.innerHTML="NO BONUS"
         },7500)
     },
     function smallBall(){
         console.log("smallBall")
+        bonusEl.innerHTML="BALL SIZE -"
         ball.radius/=2
         if (bonusInt){
             clearTimeout(bonusInt)
         }
         bonusInt=setTimeout(function(){
             ball.radius = canvas.width/80;
+            bonusEl.innerHTML="NO BONUS"
         },7500)
     },
     function speedBall(){
         console.log("speedBall")
+        bonusEl.innerHTML="BALL SPEED +"
         ball.speedx*=2
         ball.speedy*=2
         if (bonusInt){
@@ -377,10 +390,12 @@ let bonusArr=[
             if (ball.speedy>0){
                 ball.speedy = canvas.height/200
             }
+            bonusEl.innerHTML="NO BONUS"
         },7500)
     },
     function slowBall(){
         console.log("slowBall")
+        bonusEl.innerHTML="BALL SPEED -"
         ball.speedx/=2
         ball.speedy/=2
         if (bonusInt){
@@ -399,14 +414,17 @@ let bonusArr=[
             if (ball.speedy>0){
                 ball.speedy = canvas.height/200
             }
+            bonusEl.innerHTML="NO BONUS"
         },6000)
-    },
-    function multiBall(){
-        console.log("multiBall")
-        ball2 = new Ball()
     },
     function extraLife(){
         lives+=1
+        if(bonusInt){
+            clearTimeout(bonusInt)
+        }
+        bonusInt=setTimeout(function(){
+            bonusEl.innerHTML="NO BONUS"
+        },4000)
     }
 ]
 
@@ -415,32 +433,29 @@ function pickBonus(){
     console.log("pickbonus!",bonusArr[randomIndex])
     return bonusArr[randomIndex]() 
 }
-const muteBtn=document.getElementById('muteBtn')
-window.addEventListener('click', mute)
-let muteStatus=1
-function mute(){
-    
-    
-    if(muteStatus===0){
-        console.log("mute!")
-        boing.volume = 0
-        bouh.volume=0
-        cri.volume=0
-        ooh.volume=0
-        ouais.volume=0
-        muteStatus=1
-        muteBtn.innerHTML="UNMUTE AUDIO"
-        
-    }
-    else{
-        console.log("unmute!")
-        boing.volume = 1
-        bouh.volume=1
-        cri.volume=1
-        ooh.volume=1
-        ouais.volume=1
-        muteStatus=0
-        muteBtn.innerHTML="MUTE AUDIO"
-    }
-    }
+const volumeDownBtn=document.getElementById('volumeDown')
+const volumeUpBtn=document.getElementById('volumeUp')
+volumeDownBtn.addEventListener('click', volumeDown)
+volumeUpBtn.addEventListener('click',volumeUp)
+function volumeDown(){
+        console.log("volumeDown")
+        boing.volume-=0.1
+        bouh.volume-=0.1
+        cri.volume-=0.1
+        ooh.volume-=0.1
+        ouais.volume-=0.1
+        pop.volume-=0.1
+        pop.play()
+}
+
+function volumeUp(){
+        console.log("volumeUp")
+        boing.volume+=0.1
+        bouh.volume+=0.1
+        cri.volume+=0.1
+        ooh.volume+=0.1
+        ouais.volume+=0.1
+        pop.volume+=0.1
+        pop.play()
+}
 

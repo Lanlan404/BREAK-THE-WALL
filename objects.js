@@ -241,7 +241,7 @@ class Brick{
            this.bonus.x-this.bonus.radius < rect.x+rect.w &&
            this.bonus.y+this.bonus.radius+this.bonus.speedy > rect.y &&
            this.bonus.y-this.bonus.radius+this.bonus.speedy < rect.y+rect.h) {
-             //this.bonus.status=0
+             this.bonus.status=0
              this.bonus.speedy=-this.bonus.speedy
              console.log("bonustouch")
              pickBonus()

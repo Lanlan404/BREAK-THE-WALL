@@ -79,7 +79,7 @@ h1{
   }
 
 #gameCanvas {
-    background-color: black;
+    background-color:black;
     border:5px white solid;
     box-sizing:border-box;
 }
@@ -99,6 +99,7 @@ h1{
     width: 100%;
     display:flex;
     justify-content: space-around;
+    vertical-align:center;
 }
 
 .button{
@@ -111,21 +112,29 @@ h1{
     font-family: 'Press Start 2P';
 }
 
-#lives, #score,#bonus{
+.info{
     border: 1px white solid;
     font-size: var(--fs);
     padding:1em
 }
+#volumeContainer{
+    border: 1px white solid;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: fit-content;
+    margin-top: auto;
+    margin-bottom: auto;
+}
 
-#muteBtn{
+.volumeBtn{
+    font-family:"Press Start 2P";
     font-size:var(--fs);
     background-color: black;
     border:1px white solid;
     border-radius: 10%;
-    margin: 1em;
-    font-family: 'Press Start 2P';
-    padding-left: 0.5em;
-    padding-right: 0.5em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
 }
 
 #controls{
