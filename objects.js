@@ -93,7 +93,7 @@ class Brick{
     constructor(){
         this.w=canvas.width/12;
         this.h=canvas.height/15;
-        this.x=0;
+        this.x=1;
         this.y=0;
         this.rows=5;
         this.columns=Math.floor(canvas.width/(canvas.width/12))
@@ -170,7 +170,6 @@ class Brick{
     }
 
     touchBrick(){
-        // let touchBrick=false
         if (this.status === 1){
             if (ball.x+ball.radius+ball.speedx > this.brickTopDetector.x &&
                 ball.x-ball.radius+ball.speedx < this.brickTopDetector.x+this.brickTopDetector.w &&
@@ -215,6 +214,7 @@ class Brick{
                 //console.log("brick right detector")
                 ball.speedx = -ball.speedx
                 this.status = 0 
+                points +=1
                 this.rollDice()
                 boing.currentTime=0
                 boing.play()
@@ -232,17 +232,19 @@ class Brick{
         this.bonus.y+=this.bonus.speedy
         }
         else{
-        ctx.fillStyle ="rgba(0, 0, 0, 0)"
+            ctx.fillStyle ="rgba(0, 0, 0, 0)"
         }
     }
+
 
     touchBonus(){
         if(this.bonus.x+this.bonus.radius > rect.x &&
            this.bonus.x-this.bonus.radius < rect.x+rect.w &&
            this.bonus.y+this.bonus.radius+this.bonus.speedy > rect.y &&
            this.bonus.y-this.bonus.radius+this.bonus.speedy < rect.y+rect.h) {
-             this.bonus.status=0
-             this.bonus.speedy=-this.bonus.speedy
+            //    
+             this.bonus.y=0-this.bonus.radius
+             this.bonus.speedy=0
              console.log("bonustouch")
              pickBonus()
              pouet.play()

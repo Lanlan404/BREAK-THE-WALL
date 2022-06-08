@@ -18,7 +18,7 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("touchstart", mobileTouch,false);
 document.addEventListener("touchend",mobileStopTouch,false);
-button.addEventListener('click', pressStart, false);
+button.addEventListener('click', pressMainBtn, false);
 volumeDownBtn.addEventListener('click', volumeDown)
 volumeUpBtn.addEventListener('click',volumeUp)
 
@@ -67,7 +67,7 @@ function resizeGame() {
         w = H * AR
         h = H; 
         canvas.style.width = 'auto'
-        canvas.style.height = '90vh'
+        canvas.style.height = '80vh'
     }
     canvas.width = w;
     canvas.height = h;
@@ -80,19 +80,14 @@ function lostBall(){
      if (lives>0){
         if (ball.y+ball.radius>canvas.height){
             lives -= 1
-            // ball.x=canvas.width/2;
-            // ball.y=canvas.height-(canvas.height/25)*1.5-(canvas.width/100)
-            // ball.speedy=-(canvas.height/200);
-            // console.log("lives:",lives)
             ball = new Ball
             ooh.play()
-        }
-        
+        } 
     }
     else if (lives===0){
         gameOver.style.visibility = 'visible'
-        button.innerHTML="START"
-        button.id="startBtn"
+        button.innerHTML="NEW GAME"
+        button.id="newGameBtn"
         finalScore.innerHTML=`SCORE : ${points} points`
         animation=false
         bouh.play()
@@ -103,8 +98,8 @@ function lostBall(){
 function winGame(){
     if (points===60){
         youWin.style.visibility='visible'
-        button.innerHTML="START"
-        button.id="startBtn"
+        button.innerHTML="NEW GAME"
+        button.id="newGameBtn"
         finalScore.innerHTML=`SCORE : ${points} points`
         animation=false
         ouais.play()
@@ -165,7 +160,7 @@ function moveRect(){
 }
 
 // interface
-function pressStart(){
+function pressMainBtn(){
     if(button.id==='startBtn'){
     start()
     animation=true
@@ -189,6 +184,9 @@ function pressStart(){
         button.id = 'pauseBtn'
         console.log("play!",button.id)
         draw()
+    }
+    else if (button.id==="newGameBtn"){
+        location.reload()
     }
 }
 
@@ -268,10 +266,14 @@ function start(){
             }
             brick.drawBricks()
             bricks.push(brick)
+            // if (button.id==="startBtn"){
+            //     brick.bonus.status=0
+            // }
         }
         
     }
-    lives=3
+    
+    lives=3;
 }
 
 function draw() {
@@ -303,139 +305,142 @@ intervalID=setInterval(draw,16)
 
 // bonus
 let bonusArr=[
-    function largeRect(){
-        console.log("largeRect")
-        rect.w*=1.5
-        rect.rectTopDetector.w*=1.5
-        bonusEl.innerHTML="PADDLE SIZE +"
-        if (bonusInt){
-            clearTimeout(bonusInt)
-        }
-        bonusInt=setTimeout(function(){
-            rect.w=canvas.width/10;
-            rect.rectTopDetector.w=canvas.width/10;
-            bonusEl.innerHTML="NO BONUS"
-        },7500)
-    },
-    function smallRect(){
-        console.log("smallRect")
-        bonusEl.innerHTML="PADDLE SIZE -"
-        rect.w/=1.5
-        rect.rectTopDetector.w/=1.5
-        if (bonusInt){
-            clearTimeout(bonusInt)
-        }
-        bonusInt=setTimeout(function(){
-            rect.w=canvas.width/10;
-            rect.rectTopDetector.w=canvas.width/10;
-            bonusEl.innerHTML="NO BONUS"
-        },7500)
-    },
-    function speedRect(){
-        console.log("speedRect")
-        bonusEl.innerHTML="PADDLE SPEED +"
-        rect.speedx*=2
-        if (bonusInt){
-            clearTimeout(bonusInt)
-        }
-        bonusInt=setTimeout(function(){
-            rect.speedx=canvas.width/150
-            bonusEl.innerHTML="NO BONUS"
-        },7500)
-    },
-    function slowRect(){
-        console.log("slowRect")
-        bonusEl.innerHTML="PADDLE SPEED -"
-        rect.speedx/=2
-        if (bonusInt){
-            clearTimeout(bonusInt)
-        }
-        bonusInt=setTimeout(function(){
-            rect.speedx=canvas.width/150
-            bonusEl.innerHTML="NO BONUS"
-        },7500)
-    },
-    function largeBall(){
-        console.log("largeBall")
-        bonusEl.innerHTML="BALL SIZE +"
-        ball.radius*=2
-        if (bonusInt){
-            clearTimeout(bonusInt)
-        }
-        bonusInt=setTimeout(function(){
-            ball.radius = canvas.width/80;
-            bonusEl.innerHTML="NO BONUS"
-        },7500)
-    },
-    function smallBall(){
-        console.log("smallBall")
-        bonusEl.innerHTML="BALL SIZE -"
-        ball.radius/=2
-        if (bonusInt){
-            clearTimeout(bonusInt)
-        }
-        bonusInt=setTimeout(function(){
-            ball.radius = canvas.width/80;
-            bonusEl.innerHTML="NO BONUS"
-        },7500)
-    },
-    function speedBall(){
-        console.log("speedBall")
-        bonusEl.innerHTML="BALL SPEED +"
-        ball.speedx*=2
-        ball.speedy*=2
-        if (bonusInt){
-            clearTimeout(bonusInt)
-        }
-        bonusInt=setTimeout(function(){
-            if(ball.speedx>0){
-                ball.speedx= canvas.width/200;
-            }
-            if(ball.speedx>0){
-                ball.speedx = -(canvas.width/200);
-            }
-            if (ball.speedy<0){
-                ball.speedy= -(canvas.height/200);
-            }
-            if (ball.speedy>0){
-                ball.speedy = canvas.height/200
-            }
-            bonusEl.innerHTML="NO BONUS"
-        },7500)
-    },
+    // function largeRect(){
+    //     console.log("largeRect")
+    //     let largRectInt
+    //     rect.w*=1.5
+    //     rect.rectTopDetector.w*=1.5
+    //     bonusEl.innerHTML="PADDLE SIZE +"
+    //     if (largRectInt){
+    //         clearTimeout(largRectInt)
+    //     }
+    //     largRectInt=setTimeout(function(){
+    //         rect.w=canvas.width/10;
+    //         rect.rectTopDetector.w=canvas.width/10;
+    //         bonusEl.innerHTML="NO BONUS"
+    //     },7500)
+    // },
+    // function smallRect(){
+    //     console.log("smallRect")
+    //     let smallRectInt
+    //     bonusEl.innerHTML="PADDLE SIZE -"
+    //     rect.w/=1.5
+    //     rect.rectTopDetector.w/=1.5
+    //     if (smallRectInt){
+    //         clearTimeout(smallRectInt)
+    //     }
+    //     smallRectInt=setTimeout(function(){
+    //         rect.w=canvas.width/10;
+    //         rect.rectTopDetector.w=canvas.width/10;
+    //         bonusEl.innerHTML="NO BONUS"
+    //     },7500)
+    // },
+    // function speedRect(){
+    //     console.log("speedRect")
+    //     let speedRectInt
+    //     bonusEl.innerHTML="PADDLE SPEED +"
+    //     rect.speedx*=2
+    //     if (speedRectInt){
+    //         clearTimeout(speedRectInt)
+    //     }
+    //     speedRectInt=setTimeout(function(){
+    //         rect.speedx=canvas.width/150
+    //         bonusEl.innerHTML="NO BONUS"
+    //     },7500)
+    // },
+    // function slowRect(){
+    //     console.log("slowRect")
+    //     let slowRectInt
+    //     bonusEl.innerHTML="PADDLE SPEED -"
+    //     rect.speedx/=2
+    //     if (slowRectInt){
+    //         clearTimeout(slowRectInt)
+    //     }
+    //     bonusInt=setTimeout(function(){
+    //         rect.speedx=canvas.width/150
+    //         bonusEl.innerHTML="NO BONUS"
+    //     },7500)
+    // },
+    // function largeBall(){
+    //     console.log("largeBall")
+    //     let largeBallInt
+    //     bonusEl.innerHTML="BALL SIZE +"
+    //     ball.radius*=2
+    //     if (largeBallInt){
+    //         clearTimeout(largeBallInt)
+    //     }
+    //     largeBallInt=setTimeout(function(){
+    //         ball.radius = canvas.width/80;
+    //         bonusEl.innerHTML="NO BONUS"
+    //     },7500)
+    // },
+    // function smallBall(){
+    //     console.log("smallBall")
+    //     let smallBallInt
+    //     bonusEl.innerHTML="BALL SIZE -"
+    //     ball.radius/=2
+    //     if (smallBallInt){
+    //         clearTimeout(smallBallInt)
+    //     }
+    //     smallBallInt=setTimeout(function(){
+    //         ball.radius = canvas.width/80;
+    //         bonusEl.innerHTML="NO BONUS"
+    //     },7500)
+    // },
+    // function speedBall(){
+        // console.log("speedBall")
+    //     let speedBallInt
+    //     bonusEl.innerHTML="BALL SPEED +"
+    //     ball.speedx*=2
+    //     ball.speedy*=2
+    //     if (speedBallInt){
+    //         clearTimeout(speedBallInt)
+    //     }
+    //     speedBallInt=setTimeout(function(){
+    //         ball.speedx/=2
+    //         ball.speedy/=2
+    //         // if(ball.speedx>0){
+    //         //     ball.speedx= canvas.width/200;
+    //         // }
+    //         // if(ball.speedx>0){
+    //         //     ball.speedx = -(canvas.width/200);
+    //         // }
+    //         // if (ball.speedy<0){
+    //         //     ball.speedy= -(canvas.height/200);
+    //         // }
+    //         // if (ball.speedy>0){
+    //         //     ball.speedy = canvas.height/200
+    //         // }
+    //         bonusEl.innerHTML="NO BONUS"
+    //     },7500)
+    // },
     function slowBall(){
         console.log("slowBall")
+        let slowBallInt
         bonusEl.innerHTML="BALL SPEED -"
         ball.speedx/=2
         ball.speedy/=2
-        if (bonusInt){
-            clearTimeout(bonusInt)
+        if (slowBallInt){
+            clearTimeout(slowBallInt)
         }
-        bonusInt=setTimeout(function(){
-            if(ball.speedx>0){
-                ball.speedx= canvas.width/200;
-            }
-            if (ball.speedx>0){
-                ball.speedx = -(canvas.width/200);
-            }
-            if (ball.speedy<0){
-                ball.speedy= -(canvas.height/200);
-            }
-            if (ball.speedy>0){
-                ball.speedy = canvas.height/200
-            }
+        slowBallInt=setTimeout(function(){
+            ball.speedx*=2
+            ball.speedy*=2
             bonusEl.innerHTML="NO BONUS"
         },6000)
     },
-    function extraLife(){
-        lives+=1
-        if(bonusInt){
-            clearTimeout(bonusInt)
-        }
-        bonusInt=setTimeout(function(){
-            bonusEl.innerHTML="NO BONUS"
-        },4000)
-    }
+    // function extraLife(){
+    //     console.log("extraLife")
+    //     let extraLifeInt
+    //     bonusEl.innerHTML="EXTRA LIFE"
+    //     lives+=1
+    //     if(extraLifeInt){
+    //         clearTimeout(extraLifeInt)
+    //     }
+    //     extraLifeInt=setTimeout(function(){
+    //         bonusEl.innerHTML="NO BONUS"
+    //     },4000)
+    //}
 ]
 
 function pickBonus(){
