@@ -6,15 +6,19 @@ class Ball {
         this.x = canvas.width/2;
         this.y = canvas.height-(canvas.height/25)*1.5-(canvas.width/100)
         this.radius = canvas.width/80;
-        this.speedx= canvas.width/200;
-        this.speedy=-(canvas.height/200);
+        this.speedx= canvas.width/175;
+        this.speedy=-(canvas.height/175);
     }
     drawBall(){
-        ctx.beginPath();
-        ctx.fillStyle = "yellow";
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
-        ctx.fill();
-        ctx.closePath();
+        // ctx.beginPath();
+        //ctx.fillStyle = "yellow";
+        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+        // ctx.fill();
+        // ctx.closePath();
+        //ctx.fillRect(this.x-this.radius,this.y-this.radius,this.radius*2,this.radius*2)
+        let tennisBall = new Image();
+        tennisBall.src='images/tennisball.png';
+        ctx.drawImage(tennisBall,this.x-this.radius,this.y-this.radius,this.radius*2,this.radius*2)
         this.x+=this.speedx;
         this.y+=this.speedy;
     }
@@ -35,7 +39,7 @@ class Rect {
         this.h=canvas.height/25;
         this.x=canvas.width/2-(canvas.width/10)/2;
         this.y=canvas.height-(canvas.height/25)*1.5;
-        this.speedx=canvas.width/150
+        this.speedx=canvas.width/200
 
         this.rectTopDetector= {
             w:this.w,
@@ -48,13 +52,13 @@ class Rect {
             w:1,
             h:this.h,
             x:this.x,
-            y:this.y,
+            y:this.y+1
         }
         this.rectRightDetector ={
             w:1,
             h:this.h,
             x:this.x+this.w,
-            y:this.y
+            y:this.y+1
         }
     }
     
@@ -66,10 +70,14 @@ class Rect {
         ctx.strokeRect(this.x,this.y,this.w,this.h);
     }
     touchRect(){
-        if(ball.x+ball.radius+ball.speedx > this.rectTopDetector.x &&
+        if((ball.x+ball.radius+ball.speedx > this.rectTopDetector.x &&
            ball.x-ball.radius+ball.speedx < this.rectTopDetector.x+this.rectTopDetector.w &&
            ball.y+ball.radius+ball.speedy > this.rectTopDetector.y &&
-           ball.y-ball.radius+ball.speedy < this.rectTopDetector.y+this.rectTopDetector.h) {
+           ball.y-ball.radius+ball.speedy < this.rectTopDetector.y+this.rectTopDetector.h)||
+          (this.rectTopDetector.x-this.speedx < ball.x + ball.radius &&
+          this.rectTopDetector.x+this.rectTopDetector.w+this.speedx > ball.x-ball.radius &&
+          this.rectTopDetector.y < ball.y+ball.radius &&
+          this.rectTopDetector.y > ball.y-ball.radius)) {
             //console.log("topRectDetector")
             ball.speedy = -ball.speedy
             cri.play();
@@ -81,7 +89,15 @@ class Rect {
            (ball.x+ball.radius+ball.speedx > this.rectRightDetector.x &&
             ball.x-ball.radius+ball.speedx < this.rectRightDetector.x+this.rectRightDetector.w &&
             ball.y+ball.radius+ball.speedy > this.rectRightDetector.y &&
-            ball.y-ball.radius+ball.speedy < this.rectRightDetector.y+this.rectRightDetector.h)){
+            ball.y-ball.radius+ball.speedy < this.rectRightDetector.y+this.rectRightDetector.h)
+            // ||
+        //    (this.rectLeftDetector.x-this.speedx < ball.x+ball.radius &&
+        //     this.rectLeftDetector.y < ball.y+ball.radius &&
+        //     this.rectLeftDetector.y+this.rectLeftDetector.h > ball.y-ball.radius)||
+        //    (this.rectRightDetector.x+this.speedx > ball.x-ball.radius &&
+        //     this.rectRightDetector.y < ball.y+ball.radius &&
+        //     this.rectRightDetector.y+this.rectRightDetector.h > ball.y-ball.radius)
+        ){
             //console.log("sideRectDetector")
             ball.speedx = -ball.speedx
             cri.play()
@@ -93,65 +109,28 @@ class Brick{
     constructor(){
         this.w=canvas.width/12;
         this.h=canvas.height/15;
-        this.x=1;
-        this.y=0;
+        this.x=0;
+        this.y=1;
         this.rows=5;
         this.columns=Math.floor(canvas.width/(canvas.width/12))
         this.status=1
-        // this.bonusX= this.x+this.w/2;
-        // this.bonusY = this.y+this.h/2;
-        // this.bonusRadius= canvas.width/100;
-        // this.bonusSpeedy=canvas.height/200;
-        // this.bonusStatus=1;
-        // this.bricks=[]
-        // for(let c=0; c<this.columns; c++) {
-        //     this.bricks[c] = [];
-        //     for(let r=0; r<this.rows; r++) {
-        //         this.bricks[c][r] = { x: 0, y: 0, status:1}; 
-        //         this.b = this.bricks[c][r];
-        //         this.brickTopDetector={
-        //             w:this.w,
-        //             h:1,
-        //             x:this.b.x,
-        //             y:this.b.y,
-        //         }
-                    
-        //         this.brickBottomDetector={
-        //             w:this.w,
-        //             h:1,
-        //             x:this.b.x,
-        //             y:this.b.y+this.h,
-        //         }
-                    
-        //         this.brickLeftDetector={
-        //             w:1,
-        //             h:this.h,
-        //             x:this.b.x,
-        //             y:this.b.y,
-        //         }
-                    
-        //         this.brickRightDetector={
-        //             w:1,
-        //             h:this.h,
-        //             x:this.b.x+this.w,
-        //             y:this.b.y,
-        //         }
-        //     }
-        // }
     }       
      
             
     drawBricks(){
         if (this.status === 1){
-            ctx.beginPath();
-            ctx.rect(this.x, this.y, this.w, this.h);
-            ctx.strokeRect(this.x,this.y,this.w,this.h)
-            ctx.fillStyle = "rgb(178,34,34)";
-            ctx.lineWidth ="2";
-            ctx.strokeStyle = "white";
-            ctx.fill();
-            ctx.stroke();
-            ctx.closePath();
+            // ctx.beginPath();
+            // ctx.rect(this.x, this.y, this.w, this.h);
+            // ctx.strokeRect(this.x,this.y,this.w,this.h)
+            // ctx.fillStyle = "rgb(178,34,34)";
+            // ctx.lineWidth ="2";
+            // ctx.strokeStyle = "white";
+            // ctx.fill();
+            // ctx.stroke();
+            // ctx.closePath();
+            let brickImage = new Image();
+            brickImage.src="images/brick.png"
+            ctx.drawImage(brickImage,this.x, this.y,this.w,this.h)
         }
     }
     
