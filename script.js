@@ -2,25 +2,30 @@
 const gameArea = document.getElementById('gameArea');
 const startMenu = document.getElementById('startMenu');
 const button = document.querySelector('.button');
+const controlPage = document.getElementById('controlPage')
 const gameOver=document.getElementById('gameOver');
-const youWin=document.getElementById('youWin') ;
+const youWin=document.getElementById('youWin');
 const finalScore=document.querySelector('.finalScore')
 const actualscore = document.getElementById("score")
 const remainingLives = document.getElementById("lives")
 const bonusEl=document.getElementById('bonus')
 const volumeDownBtn=document.getElementById('volumeDown')
 const volumeUpBtn=document.getElementById('volumeUp')
+const controlsBtn=document.getElementById('controlsBtn')
 
 
 //event Listeners
-window.addEventListener('resize', resizeGame)
+window.addEventListener('resize', resizeGame);
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("touchstart", mobileTouch,false);
 document.addEventListener("touchend",mobileStopTouch,false);
-button.addEventListener('click', pressMainBtn, false);
-volumeDownBtn.addEventListener('click', volumeDown)
-volumeUpBtn.addEventListener('click',volumeUp)
+button.addEventListener('click', pressMainBtn);
+volumeDownBtn.addEventListener('click', volumeDown);
+volumeUpBtn.addEventListener('click',volumeUp);
+controlsBtn.addEventListener('click', showControls,false);
+
+
 
 
 //variables
@@ -30,11 +35,13 @@ let H = window.innerHeight;
 let newAR = W / H;
 let rightPressed = false;
 let leftPressed = false;
+let upPressed = false;
 let animation
 let lives = 3
 let points
 let bricks = []
 let bonusInt
+let hiddenControls = 1
 
 
 //sounds
@@ -119,20 +126,43 @@ function winGame(){
 
 // move
 function keyDownHandler(e) {
-    if(e.key == "Right" || e.key == "ArrowRight") {
+    if(e.key === "Right" || e.key === "ArrowRight") {
         rightPressed = true;
+        e.preventDefault()
     }
-    else if(e.key == "Left" || e.key == "ArrowLeft") {
+    else if(e.key === "Left" || e.key === "ArrowLeft") {
         leftPressed = true;    
+        e.preventDefault()
+    }
+    else if (e.key === "Up" || e.key=== "ArrowUp"){
+        upPressed = true
+        e.preventDefault()
+    }
+    else if (e.key === ','){
+        volumeDown();
+        e.preventDefault()
+    }
+    else if (e.key === ';'){
+        volumeUp()
+        e.preventDefault()
     }
 }
 
 function keyUpHandler(e) {
-    if(e.key == "Right" || e.key == "ArrowRight") {
+    if(e.key === "Right" || e.key === "ArrowRight") {
         rightPressed = false;
     }
-    else if(e.key == "Left" || e.key == "ArrowLeft") {
+    else if(e.key === "Left" || e.key === "ArrowLeft") {
         leftPressed = false;
+    }
+    else if (e.key === "Up" || e.key === "ArrowUp"){
+        upPressed = false
+    }
+    else if (e.key === ','){
+        return false
+    }
+    else if (e.key === ';'){
+        return false
     }
 }
 
@@ -140,15 +170,18 @@ function mobileTouch(e){
     screenX = e.touches[0].screenX;
     if (screenX>canvas.width/2){
         rightPressed=true
+        upPressed=true
     }
     if (screenX<=canvas.width/2){
         leftPressed=true
+        upPressed=true
     }
 }
 
 function mobileStopTouch(e){
     rightPressed=false
     leftPressed=false
+    upPressed=false
 }
 
 function moveRect(){
@@ -211,6 +244,7 @@ function volumeDown(){
     pouet.volume-=0.1
     mariocoin.volume-=0.1
     pop.play()
+    console.log("volume=",pop.volume)
 }
 
 function volumeUp(){
@@ -224,8 +258,22 @@ function volumeUp(){
     pouet.volume+=0.1
     mariocoin.volume+=0.1
     pop.play()
+    console.log("volume=",pop.volume)
 }
 
+function showControls(){
+    console.log("showcontrols")
+    if (hiddenControls===1){
+        controlPage.style.visibility = "visible"
+        hiddenControls=0
+        animation=false
+    }
+    else if (hiddenControls===0){
+        controlPage.style.visibility = "hidden"
+        hiddenControls=1
+    }
+
+}
 
 //game
 function start(){
@@ -244,6 +292,7 @@ function start(){
                 radius:canvas.width/100,
                 speedy:canvas.height/400,
                 status:0,
+                animation:0
             }
             brick.bonusX=brick.x+brick.w/2
             brick.bonusY=brick.y+brick.h/2
@@ -303,6 +352,10 @@ function draw() {
         winGame();
         actualscore.innerHTML =`SCORE : ${points}`
         remainingLives.innerHTML=`LIVES : ${lives}`
+        ball.checkBallAnimation()
+        if (ball.animation===true){
+            ball.moveBall();
+            }
     }
     else{
         clearInterval(intervalID)

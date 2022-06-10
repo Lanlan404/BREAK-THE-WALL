@@ -45,23 +45,31 @@
                 <p class="finalScore"></p>
                 <p class="pressInfo">Press NEW GAME to reload</p>
             </div>
+            <div id = "controlPage">
+                <p class="controls">[LEFT ARROW] : MOVE LEFT</p>
+                <p class="controls">[RIGHT ARROW] : MOVE RIGHT</p> 
+                <p class="controls">[UP ARROW] : LAUNCH BALL</p>
+                <p class="controls">[,] : VOLUME DOWN</p>
+                <p class="controls">[;] : VOLUME UP</p>
+            </div>
         </div>
         <div id="HUD">
             <div id="topHUD">
-                <button id="startBtn" class="button"> START</button>
                 <p id="lives" class="info">LIVES : 3</p>
-                <p id="score"class="info">SCORE : 0</p>
+                <button id="startBtn" class="button"> START</button>
                 <p id="bonus"class="info">NO BONUS</p>
+            </div>
+            <div id="botHUD">
+                <p id="score"class="info">SCORE : 0</p>
+                <btn id="controlsBtn">CONTROLS</btn>
                 <div id="volumeContainer">
                     <button id="volumeDown" class="volumeBtn">-</button>
                     <p id="volume">VOLUME</p>
                     <button id="volumeUp" class="volumeBtn">+</button>
                 </div>
             </div>
-        <div id = "controls">
-            <p class="controls">[LEFT ARROW] : MOVE LEFT</p>
-            <p class="controls">[RIGHT ARROW] : MOVE RIGHT</p> 
         </div>
+        
     </div>
     <script src="objects.js"></script>
     <script src="script.js"></script>

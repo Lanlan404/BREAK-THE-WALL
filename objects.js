@@ -4,10 +4,11 @@ const ctx = canvas.getContext("2d");
 class Ball {
     constructor() {
         this.x = canvas.width/2;
-        this.y = canvas.height-(canvas.height/25)*1.5-(canvas.width/100)
+        this.y = canvas.height-(canvas.height/10)
         this.radius = canvas.width/80;
         this.speedx= canvas.width/175;
         this.speedy=-(canvas.height/175);
+        this.animation = false
     }
     drawBall(){
         // ctx.beginPath();
@@ -19,10 +20,17 @@ class Ball {
         let tennisBall = new Image();
         tennisBall.src='images/tennisball.png';
         ctx.drawImage(tennisBall,this.x-this.radius,this.y-this.radius,this.radius*2,this.radius*2)
+    }
+    
+    moveBall(){
         this.x+=this.speedx;
         this.y+=this.speedy;
     }
-    
+    checkBallAnimation(){
+        if (upPressed===true){
+            ball.animation=true
+        }
+    }
     touchBorder(){
         if(this.x+this.speedx > canvas.width || this.x+this.speedx < 0) {
             this.speedx = -this.speedx;
