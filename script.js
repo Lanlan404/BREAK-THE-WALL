@@ -89,6 +89,7 @@ function lostBall(){
             clearTimeout(slowBallInt)
             clearTimeout(speedBallInt)
             clearTimeout(smallBallInt)
+            bonusEl.innerHTML="NO BONUS"
             ball = new Ball
             ooh.play()
         } 
