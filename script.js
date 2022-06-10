@@ -458,14 +458,14 @@ let bonusArr=[
     function speedBall(){
         console.log("speedBall")
         bonusEl.innerHTML="BALL SPEED +"
-        ball.speedx*=2
-        ball.speedy*=2
+        ball.speedx*=1.5
+        ball.speedy*=1.5
         if (speedBallInt){
             clearTimeout(speedBallInt)
         }
         speedBallInt=setTimeout(function(){
-            ball.speedx/=2
-            ball.speedy/=2
+            ball.speedx/=1.5
+            ball.speedy/=1.5
             bonusEl.innerHTML="NO BONUS"
         },7500)
     },
