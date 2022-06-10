@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8" >
+    <meta charset="utf-8">
     <title>break the wall</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" href="style.css">  
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     <!-- Primary Meta Tags -->
     <meta name="title" content="BREAK-THE-WALL">
     <meta name="description" content="Come play!">
@@ -24,43 +26,53 @@
     <meta property="twitter:url" content="https://lanlan404.github.io/BREAK-THE-WALL/">
     <meta property="twitter:title" content="BREAK-THE-WALL">
     <meta property="twitter:description" content="Come play!">
-    <meta property="twitter:image" content="https://res.cloudinary.com/dpagtcogf/image/upload/v1654880080/btw-miniature.png">
+    <meta property="twitter:image"
+        content="https://res.cloudinary.com/dpagtcogf/image/upload/v1654880080/btw-miniature.png">
 
 </head>
+
 <body>
     <div id="gameArea">
         <div id="container">
+
             <div id="startMenu">
                 <h1>BREAK THE WALL</h1>
                 <p class="pressInfo">Press START to PLAY</p>
             </div>
-            <canvas id="gameCanvas" ></canvas>
+            
             <div id="gameOver">
                 <h1>GAME OVER</h1>
                 <p class="finalScore"></p>
                 <p class="pressInfo">Press NEW GAME to reload</p>
             </div>
+
             <div id="youWin">
                 <h1>YOU WIN!</h1>
                 <p class="finalScore"></p>
                 <p class="pressInfo">Press NEW GAME to reload</p>
             </div>
-            <div id = "controlPage">
+            
+            <div id="controlPage">
                 <p class="controls">[LEFT ARROW] : MOVE LEFT</p>
-                <p class="controls">[RIGHT ARROW] : MOVE RIGHT</p> 
+                <p class="controls">[RIGHT ARROW] : MOVE RIGHT</p>
                 <p class="controls">[UP ARROW] : LAUNCH BALL</p>
                 <p class="controls">[,] : VOLUME DOWN</p>
                 <p class="controls">[;] : VOLUME UP</p>
             </div>
+
+            <canvas id="gameCanvas"></canvas>
         </div>
+
         <div id="HUD">
+
             <div id="topHUD">
                 <p id="lives" class="info">LIVES : 3</p>
                 <button id="startBtn" class="button"> START</button>
-                <p id="bonus"class="info">NO BONUS</p>
+                <p id="bonus" class="info">NO BONUS</p>
             </div>
+
             <div id="botHUD">
-                <p id="score"class="info">SCORE : 0</p>
+                <p id="score" class="info">SCORE : 0</p>
                 <btn id="controlsBtn">CONTROLS</btn>
                 <div id="volumeContainer">
                     <button id="volumeDown" class="volumeBtn">-</button>
@@ -69,9 +81,10 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
     <script src="objects.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>

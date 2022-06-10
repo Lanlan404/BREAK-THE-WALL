@@ -40,6 +40,7 @@ canvas {
     display:flex;
     flex-direction: column;
 }
+
 #gameOver,#youWin,#controlPage{
     background-color: black;
     font-size:var(--fs);
@@ -70,10 +71,6 @@ h1{
   }
 
 #gameCanvas {
-    /* background-color:black; */
-    /* border-left:5px white solid;
-    border-top:5px white solid;
-    border-right:5px white solid; */
     background-image:url("images/background.png");
     background-size:contain;
     box-sizing:border-box;
@@ -116,10 +113,12 @@ h1{
     width:20%;
     text-align: center;
 }
+
 #bonus{
     width:25%;
     text-align:center;
 }
+
 #volumeContainer{
     border: 1px white solid;
     font-size: 1vmin;
@@ -150,6 +149,7 @@ h1{
     justify-content: center;
     
 }
+
 .controls{
     border: 1px white solid;
     width:50%;
