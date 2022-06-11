@@ -6,8 +6,8 @@ class Ball {
         this.x = canvas.width / 2;
         this.y = canvas.height - (canvas.height / 10)
         this.radius = canvas.width / 80;
-        this.speedx = canvas.width / 175;
-        this.speedy = -(canvas.height / 175);
+        this.speedx = canvas.width / 300;
+        this.speedy = -(canvas.height / 300);
         this.animation = false
     }
     drawBall() {
@@ -41,7 +41,7 @@ class Rect {
         this.h = canvas.height / 25;
         this.x = canvas.width / 2 - (canvas.width / 10) / 2;
         this.y = canvas.height - (canvas.height / 25) * 1.5;
-        this.speedx = canvas.width / 200
+        this.speedx = canvas.width / 320
 
         this.rectTopDetector = {
             w: this.w,
@@ -188,12 +188,17 @@ class Brick {
 
     drawBonus() {
         if (this.bonus.status === 1) {
-            ctx.fillStyle = "green";
-            ctx.beginPath();
-            ctx.arc(this.bonus.x, this.bonus.y, this.bonus.radius, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.closePath();
+            // ctx.fillStyle = "green";
+            // ctx.beginPath();
+            // ctx.arc(this.bonus.x, this.bonus.y, this.bonus.radius, 0, Math.PI * 2);
+            
+            // ctx.fill();
+            // ctx.closePath();
+            let bonusImg = new Image();
+            bonusImg.src = 'images/bonus.png';
+            ctx.drawImage(bonusImg, this.bonus.x - this.bonus.radius, this.bonus.y - this.bonus.radius, this.bonus.radius * 2, this.bonus.radius * 2)
             this.bonus.y += this.bonus.speedy
+            
         }
         else {
             ctx.fillStyle = "rgba(0, 0, 0, 0)"

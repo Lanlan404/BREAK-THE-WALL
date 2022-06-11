@@ -289,7 +289,7 @@ function start() {
                 x: brick.x + brick.w / 2,
                 y: brick.y + brick.h / 2,
                 radius: canvas.width / 100,
-                speedy: canvas.height / 400,
+                speedy: canvas.height / 500,
                 status: 0,
                 animation: 0
             }
@@ -330,7 +330,7 @@ function start() {
 };
 
 function draw() {
-    let intervalID
+    // let intervalID
     let requestID
     if (animation === true) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
